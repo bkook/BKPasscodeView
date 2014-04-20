@@ -19,6 +19,10 @@
 		DFB107D01903ECF70038FB05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B81903ECF70038FB05 /* UIKit.framework */; };
 		DFB107D81903ECF70038FB05 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DFB107D61903ECF70038FB05 /* InfoPlist.strings */; };
 		DFB107DA1903ECF70038FB05 /* BKPasscodeViewDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFB107D91903ECF70038FB05 /* BKPasscodeViewDemoTests.m */; };
+		DFB107E61903EDA90038FB05 /* BKPasscodeField.m in Sources */ = {isa = PBXBuildFile; fileRef = DFB107E51903EDA90038FB05 /* BKPasscodeField.m */; };
+		DFB107EA1903EFE30038FB05 /* BKPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFB107E81903EFE30038FB05 /* BKPasscodeViewController.m */; };
+		DFB107EE1903FE4F0038FB05 /* BKPasscodeInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = DFB107ED1903FE4F0038FB05 /* BKPasscodeInputView.m */; };
+		DFB107F1190428910038FB05 /* BKShiftingPasscodeInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = DFB107F0190428910038FB05 /* BKShiftingPasscodeInputView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +52,14 @@
 		DFB107D51903ECF70038FB05 /* BKPasscodeViewDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BKPasscodeViewDemoTests-Info.plist"; sourceTree = "<group>"; };
 		DFB107D71903ECF70038FB05 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DFB107D91903ECF70038FB05 /* BKPasscodeViewDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeViewDemoTests.m; sourceTree = "<group>"; };
+		DFB107E41903EDA90038FB05 /* BKPasscodeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeField.h; sourceTree = "<group>"; };
+		DFB107E51903EDA90038FB05 /* BKPasscodeField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeField.m; sourceTree = "<group>"; };
+		DFB107E71903EFE30038FB05 /* BKPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeViewController.h; sourceTree = "<group>"; };
+		DFB107E81903EFE30038FB05 /* BKPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeViewController.m; sourceTree = "<group>"; };
+		DFB107EC1903FE4F0038FB05 /* BKPasscodeInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeInputView.h; sourceTree = "<group>"; };
+		DFB107ED1903FE4F0038FB05 /* BKPasscodeInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeInputView.m; sourceTree = "<group>"; };
+		DFB107EF190428910038FB05 /* BKShiftingPasscodeInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKShiftingPasscodeInputView.h; sourceTree = "<group>"; };
+		DFB107F0190428910038FB05 /* BKShiftingPasscodeInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKShiftingPasscodeInputView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +121,7 @@
 			children = (
 				DFB107C31903ECF70038FB05 /* AppDelegate.h */,
 				DFB107C41903ECF70038FB05 /* AppDelegate.m */,
+				DFB107E31903ED6C0038FB05 /* BKPasscodeView */,
 				DFB107C61903ECF70038FB05 /* Images.xcassets */,
 				DFB107BB1903ECF70038FB05 /* Supporting Files */,
 			);
@@ -142,6 +155,21 @@
 				DFB107D61903ECF70038FB05 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DFB107E31903ED6C0038FB05 /* BKPasscodeView */ = {
+			isa = PBXGroup;
+			children = (
+				DFB107E41903EDA90038FB05 /* BKPasscodeField.h */,
+				DFB107E51903EDA90038FB05 /* BKPasscodeField.m */,
+				DFB107EC1903FE4F0038FB05 /* BKPasscodeInputView.h */,
+				DFB107ED1903FE4F0038FB05 /* BKPasscodeInputView.m */,
+				DFB107EF190428910038FB05 /* BKShiftingPasscodeInputView.h */,
+				DFB107F0190428910038FB05 /* BKShiftingPasscodeInputView.m */,
+				DFB107E71903EFE30038FB05 /* BKPasscodeViewController.h */,
+				DFB107E81903EFE30038FB05 /* BKPasscodeViewController.m */,
+			);
+			name = BKPasscodeView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,8 +267,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFB107F1190428910038FB05 /* BKShiftingPasscodeInputView.m in Sources */,
 				DFB107C51903ECF70038FB05 /* AppDelegate.m in Sources */,
+				DFB107EE1903FE4F0038FB05 /* BKPasscodeInputView.m in Sources */,
 				DFB107C11903ECF70038FB05 /* main.m in Sources */,
+				DFB107E61903EDA90038FB05 /* BKPasscodeField.m in Sources */,
+				DFB107EA1903EFE30038FB05 /* BKPasscodeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,7 +346,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -346,7 +378,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -360,6 +392,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BKPasscodeViewDemo/BKPasscodeViewDemo-Prefix.pch";
 				INFOPLIST_FILE = "BKPasscodeViewDemo/BKPasscodeViewDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -373,6 +406,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BKPasscodeViewDemo/BKPasscodeViewDemo-Prefix.pch";
 				INFOPLIST_FILE = "BKPasscodeViewDemo/BKPasscodeViewDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

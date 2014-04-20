@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "BKPasscodeViewController.h"
 
 @implementation AppDelegate
 
@@ -15,7 +16,15 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
+    
+    BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] init];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    
+    self.window.rootViewController = viewController;
+    
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
