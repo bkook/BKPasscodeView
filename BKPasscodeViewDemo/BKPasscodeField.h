@@ -8,9 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol BKPasscodeFieldDelegate;
+
 @interface BKPasscodeField : UIControl <UIKeyInput, UIInputViewAudioFeedback>
 
-@property (nonatomic, readonly) NSString    *passcode;
+// delegate
+@property (nonatomic, assign) id<BKPasscodeFieldDelegate> delegate;
+
+// passcode
+@property (nonatomic, strong) NSString      *passcode;
 
 // configurations
 @property (nonatomic) NSUInteger            maximumLength;
@@ -18,5 +24,14 @@
 @property (nonatomic) CGFloat           	lineHeight;
 @property (nonatomic) CGFloat           	dotSpacing;
 @property (nonatomic, strong) UIColor       *dotColor;
+
+@end
+
+
+@protocol BKPasscodeFieldDelegate <NSObject>
+
+@optional
+- (BOOL)passcodeField:(BKPasscodeField *)aPasscodeField shouldInsertText:(NSString *)aText;
+- (BOOL)passcodeFieldShouldDeleteBackward:(BKPasscodeField *)aPasscodeField;
 
 @end

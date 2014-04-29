@@ -16,15 +16,6 @@
 
 @implementation BKShiftingPasscodeInputView
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        [self _initialize];
-    }
-    return self;
-}
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -65,13 +56,14 @@
     BKPasscodeInputView *previousInputView = self.passcodeInputView;
     previousInputView.enabled = NO;
     
-    CGRect nextFrame;
+    CGRect nextFrame = self.bounds;
+    
     switch (direction) {
         case BKShiftingDirectionForward:
-            nextFrame = CGRectMake(CGRectGetWidth(self.bounds), 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+            nextFrame.origin.x = CGRectGetWidth(self.bounds);
             break;
         case BKShiftingDirectionBackward:
-            nextFrame = CGRectMake(-CGRectGetWidth(self.bounds), 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+            nextFrame.origin.x = -CGRectGetWidth(self.bounds);
             break;
     }
     
@@ -88,7 +80,7 @@
     [self addSubview:self.passcodeInputView];
     
     // start animation
-    [UIView animateWithDuration:0.4f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         
         switch (direction) {
             case BKShiftingDirectionForward:
@@ -100,8 +92,6 @@
                 self.passcodeInputView.frame = CGRectOffset(self.passcodeInputView.frame, CGRectGetWidth(self.bounds), 0);
                 break;
         }
-        
-        previousInputView.alpha = 0;
         
     } completion:^(BOOL finished) {
         

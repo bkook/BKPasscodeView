@@ -11,6 +11,7 @@
 @interface BKPasscodeField ()
 
 @property (strong, nonatomic) NSMutableString       *mutablePasscode;
+@property (strong, nonatomic) NSRegularExpression   *nonDigitRegularExpression;
 
 @end
 
@@ -54,11 +55,27 @@
     [self setBackgroundColor:[UIColor clearColor]];
     
     _mutablePasscode = [[NSMutableString alloc] initWithCapacity:4];
+    
+    _nonDigitRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"[^0-9]+" options:0 error:nil];
 }
 
 - (NSString *)passcode
 {
     return self.mutablePasscode;
+}
+
+- (void)setPasscode:(NSString *)passcode
+{
+    if (passcode) {
+        if (passcode.length > self.maximumLength) {
+            passcode = [passcode substringWithRange:NSMakeRange(0, self.maximumLength)];
+        }
+        self.mutablePasscode = [NSMutableString stringWithString:passcode];
+    } else {
+        self.mutablePasscode = [NSMutableString string];
+    }
+    
+    [self setNeedsDisplay];
 }
 
 #pragma mark - UIKeyInput
@@ -72,6 +89,17 @@
 {
     if (self.enabled == NO) {
         return;
+    }
+    
+    NSUInteger numberOfMatches = [self.nonDigitRegularExpression numberOfMatchesInString:text options:0 range:NSMakeRange(0, text.length)];
+    if (numberOfMatches > 0) {
+        return;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(passcodeField:shouldInsertText:)]) {
+        if (NO == [self.delegate passcodeField:self shouldInsertText:text]) {
+            return;
+        }
     }
     
     if (self.mutablePasscode.length == self.maximumLength) {
@@ -91,6 +119,12 @@
 {
     if (self.enabled == NO) {
         return;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(passcodeFieldShouldDeleteBackward:)]) {
+        if (NO == [self.delegate passcodeFieldShouldDeleteBackward:self]) {
+            return;
+        }
     }
     
     if (self.mutablePasscode.length == 0) {

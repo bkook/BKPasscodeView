@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF346E4F190BF66600E850F9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF346E4E190BF66600E850F9 /* MainViewController.m */; };
+		DF83130D190D0C5800148DB2 /* BKPasscodeView.strings in Resources */ = {isa = PBXBuildFile; fileRef = DF83130F190D0C5800148DB2 /* BKPasscodeView.strings */; };
+		DF831317190D12E000148DB2 /* UIView+Shake.m in Sources */ = {isa = PBXBuildFile; fileRef = DF831316190D12E000148DB2 /* UIView+Shake.m */; };
+		DF831319190D133A00148DB2 /* LICENSE-UIView+Shake in Resources */ = {isa = PBXBuildFile; fileRef = DF831318190D133A00148DB2 /* LICENSE-UIView+Shake */; };
 		DFB107B51903ECF70038FB05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B41903ECF70038FB05 /* Foundation.framework */; };
 		DFB107B71903ECF70038FB05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B61903ECF70038FB05 /* CoreGraphics.framework */; };
 		DFB107B91903ECF70038FB05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B81903ECF70038FB05 /* UIKit.framework */; };
@@ -36,6 +40,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DF346E4D190BF66600E850F9 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		DF346E4E190BF66600E850F9 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		DF83130E190D0C5800148DB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BKPasscodeView.strings; sourceTree = "<group>"; };
+		DF831310190D0C7B00148DB2 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/BKPasscodeView.strings; sourceTree = "<group>"; };
+		DF831312190D0C7B00148DB2 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DF831315190D12E000148DB2 /* UIView+Shake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Shake.h"; sourceTree = "<group>"; };
+		DF831316190D12E000148DB2 /* UIView+Shake.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Shake.m"; sourceTree = "<group>"; };
+		DF831318190D133A00148DB2 /* LICENSE-UIView+Shake */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LICENSE-UIView+Shake"; sourceTree = "<group>"; };
 		DFB107B11903ECF70038FB05 /* BKPasscodeViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BKPasscodeViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFB107B41903ECF70038FB05 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DFB107B61903ECF70038FB05 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -86,9 +98,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DF831313190D12AA00148DB2 /* Externals */ = {
+			isa = PBXGroup;
+			children = (
+				DF831314190D12E000148DB2 /* UIView+Shake */,
+			);
+			path = Externals;
+			sourceTree = "<group>";
+		};
+		DF831314190D12E000148DB2 /* UIView+Shake */ = {
+			isa = PBXGroup;
+			children = (
+				DF831315190D12E000148DB2 /* UIView+Shake.h */,
+				DF831316190D12E000148DB2 /* UIView+Shake.m */,
+				DF831318190D133A00148DB2 /* LICENSE-UIView+Shake */,
+			);
+			path = "UIView+Shake";
+			sourceTree = "<group>";
+		};
 		DFB107A81903ECF70038FB05 = {
 			isa = PBXGroup;
 			children = (
+				DF831313190D12AA00148DB2 /* Externals */,
 				DFB107BA1903ECF70038FB05 /* BKPasscodeViewDemo */,
 				DFB107D31903ECF70038FB05 /* BKPasscodeViewDemoTests */,
 				DFB107B31903ECF70038FB05 /* Frameworks */,
@@ -121,6 +152,8 @@
 			children = (
 				DFB107C31903ECF70038FB05 /* AppDelegate.h */,
 				DFB107C41903ECF70038FB05 /* AppDelegate.m */,
+				DF346E4D190BF66600E850F9 /* MainViewController.h */,
+				DF346E4E190BF66600E850F9 /* MainViewController.m */,
 				DFB107E31903ED6C0038FB05 /* BKPasscodeView */,
 				DFB107C61903ECF70038FB05 /* Images.xcassets */,
 				DFB107BB1903ECF70038FB05 /* Supporting Files */,
@@ -168,6 +201,7 @@
 				DFB107F0190428910038FB05 /* BKShiftingPasscodeInputView.m */,
 				DFB107E71903EFE30038FB05 /* BKPasscodeViewController.h */,
 				DFB107E81903EFE30038FB05 /* BKPasscodeViewController.m */,
+				DF83130F190D0C5800148DB2 /* BKPasscodeView.strings */,
 			);
 			name = BKPasscodeView;
 			sourceTree = "<group>";
@@ -230,6 +264,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ko,
 			);
 			mainGroup = DFB107A81903ECF70038FB05;
 			productRefGroup = DFB107B21903ECF70038FB05 /* Products */;
@@ -247,7 +282,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF83130D190D0C5800148DB2 /* BKPasscodeView.strings in Resources */,
 				DFB107BF1903ECF70038FB05 /* InfoPlist.strings in Resources */,
+				DF831319190D133A00148DB2 /* LICENSE-UIView+Shake in Resources */,
 				DFB107C71903ECF70038FB05 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,7 +305,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				DFB107F1190428910038FB05 /* BKShiftingPasscodeInputView.m in Sources */,
+				DF831317190D12E000148DB2 /* UIView+Shake.m in Sources */,
 				DFB107C51903ECF70038FB05 /* AppDelegate.m in Sources */,
+				DF346E4F190BF66600E850F9 /* MainViewController.m in Sources */,
 				DFB107EE1903FE4F0038FB05 /* BKPasscodeInputView.m in Sources */,
 				DFB107C11903ECF70038FB05 /* main.m in Sources */,
 				DFB107E61903EDA90038FB05 /* BKPasscodeField.m in Sources */,
@@ -295,6 +334,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		DF83130F190D0C5800148DB2 /* BKPasscodeView.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DF83130E190D0C5800148DB2 /* en */,
+				DF831310190D0C7B00148DB2 /* ko */,
+			);
+			name = BKPasscodeView.strings;
+			sourceTree = "<group>";
+		};
 		DFB107BD1903ECF70038FB05 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -307,6 +355,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DFB107D71903ECF70038FB05 /* en */,
+				DF831312190D0C7B00148DB2 /* ko */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -391,6 +440,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BKPasscodeViewDemo/BKPasscodeViewDemo-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/Externals/**",
+				);
 				INFOPLIST_FILE = "BKPasscodeViewDemo/BKPasscodeViewDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -405,6 +459,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BKPasscodeViewDemo/BKPasscodeViewDemo-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/Externals/**",
+				);
 				INFOPLIST_FILE = "BKPasscodeViewDemo/BKPasscodeViewDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -471,6 +530,7 @@
 				DFB107DF1903ECF70038FB05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DFB107E01903ECF70038FB05 /* Build configuration list for PBXNativeTarget "BKPasscodeViewDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -479,6 +539,7 @@
 				DFB107E21903ECF70038FB05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -8,8 +8,6 @@
 
 #import "BKPasscodeInputView.h"
 
-#import "BKPasscodeField.h"
-
 #define kLabelPasscodeSpacePortrait         (30.0f)
 #define kLabelPasscodeSpaceLandscape        (10.0f)
 
@@ -17,6 +15,9 @@
 
 #define kErrorMessageLeftRightPadding       (10.0f)
 #define kErrorMessageTopBottomPadding       (5.0f)
+
+#define kDefaultNumericPasscodeMaximumLength        (4)
+#define kDefaultNormalPasscodeMaximumLength         (20)
 
 @interface BKPasscodeInputView ()
 
@@ -28,15 +29,6 @@
 @end
 
 @implementation BKPasscodeInputView
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        [self _initialize];
-    }
-    return self;
-}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -83,7 +75,7 @@
     aLabel.numberOfLines = 1;
     aLabel.textAlignment = NSTextAlignmentCenter;
     aLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    aLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+    aLabel.font = [UIFont boldSystemFontOfSize:15.0f];
 }
 
 + (void)configureMessageLabel:(UILabel *)aLabel
@@ -91,7 +83,7 @@
     aLabel.numberOfLines = 0;
     aLabel.textAlignment = NSTextAlignmentCenter;
     aLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    aLabel.font = [UIFont systemFontOfSize:14.0f];
+    aLabel.font = [UIFont systemFontOfSize:15.0f];
 }
 
 + (void)configureErrorMessageLabel:(UILabel *)aLabel
@@ -101,7 +93,7 @@
     aLabel.lineBreakMode = NSLineBreakByWordWrapping;
     aLabel.backgroundColor = [UIColor colorWithRed:0.63 green:0.2 blue:0.13 alpha:1];
     aLabel.textColor = [UIColor whiteColor];
-    aLabel.font = [UIFont systemFontOfSize:14.0f];
+    aLabel.font = [UIFont systemFontOfSize:15.0f];
     
     aLabel.layer.cornerRadius = 10.0f;
     aLabel.layer.masksToBounds = YES;
@@ -116,14 +108,21 @@
     switch (passcodeStyle) {
         case BKPasscodeInputViewNumericPasscodeStyle:
         {
-            self.passcodeControl = [[BKPasscodeField alloc] init];
-            [self.passcodeControl sizeToFit];
-            [self.passcodeControl addTarget:self action:@selector(passcodeControlEditingChanged:) forControlEvents:UIControlEventEditingChanged];
+            _maximumLength = kDefaultNumericPasscodeMaximumLength;
+            
+            BKPasscodeField *passcodeField = [[BKPasscodeField alloc] init];
+            [passcodeField setDelegate:self];
+            [passcodeField sizeToFit];
+            [passcodeField addTarget:self action:@selector(passcodeControlEditingChanged:) forControlEvents:UIControlEventEditingChanged];
+            [passcodeField setMaximumLength:self.maximumLength];
+            [self setPasscodeControl:passcodeField];
             break;
         }
             
         case BKPasscodeInputViewNormalPasscodeStyle:
         {
+            _maximumLength = kDefaultNormalPasscodeMaximumLength;
+            
             UITextField *textField = [[UITextField alloc] init];
             textField.delegate = self;
             textField.borderStyle = UITextBorderStyleRoundedRect;
@@ -133,16 +132,23 @@
             textField.enablesReturnKeyAutomatically = YES;
             textField.keyboardType = UIKeyboardTypeASCIICapable;
             textField.secureTextEntry = YES;
-            textField.font = [UIFont systemFontOfSize:20.0f];
+            textField.font = [UIFont systemFontOfSize:25.0f];
             textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-            [textField sizeToFit];
-            textField.frame = CGRectMake(0, 0, self.frame.size.width - kTextLeftRightSpace * 2.0f, CGRectGetHeight(textField.frame) + 10.0f);
-            self.passcodeControl = textField;
+            [self setPasscodeControl:textField];
             break;
         }
     }
     
     [self addSubview:_passcodeControl];
+}
+
+- (void)setMaximumLength:(NSUInteger)maximumLength
+{
+    _maximumLength = maximumLength;
+    
+    if ([self.passcodeControl isKindOfClass:[BKPasscodeField class]]) {
+        [(BKPasscodeField *)self.passcodeControl setMaximumLength:maximumLength];
+    }
 }
 
 - (void)setTitle:(NSString *)title
@@ -188,15 +194,6 @@
     return self.errorMessageLabel.text;
 }
 
-- (void)setEnabled:(BOOL)enabled
-{
-    _enabled = enabled;
-    
-    if ([self.passcodeControl isKindOfClass:[BKPasscodeField class]]) {
-        [self.passcodeControl setEnabled:enabled];
-    }
-}
-
 - (NSString *)passcode
 {
     switch (self.passcodeStyle) {
@@ -204,6 +201,18 @@
             return [(BKPasscodeField *)self.passcodeControl passcode];
         case BKPasscodeInputViewNormalPasscodeStyle:
             return [(UITextField *)self.passcodeControl text];
+    }
+}
+
+- (void)setPasscode:(NSString *)passcode
+{
+    switch (self.passcodeStyle) {
+        case BKPasscodeInputViewNumericPasscodeStyle:
+            [(BKPasscodeField *)self.passcodeControl setPasscode:passcode];
+            break;
+        case BKPasscodeInputViewNormalPasscodeStyle:
+             [(UITextField *)self.passcodeControl setText:passcode];
+             break;
     }
 }
 
@@ -219,6 +228,11 @@
     [super layoutSubviews];
     
     // layout passcode control to center
+    if ([self.passcodeControl isKindOfClass:[UITextField class]]) {
+        [self.passcodeControl sizeToFit];
+        self.passcodeControl.frame = CGRectMake(0, 0, self.frame.size.width - kTextLeftRightSpace * 2.0f, CGRectGetHeight(self.passcodeControl.frame) + 10.0f);
+    }
+
     _passcodeControl.center = CGPointMake(CGRectGetWidth(self.frame) * 0.5f, CGRectGetHeight(self.frame) * 0.5f);
     
     CGFloat maxTextWidth = self.frame.size.width - (kTextLeftRightSpace * 2.0f);
@@ -294,11 +308,28 @@
     }
 }
 
+#pragma mark - BKPasscodeFieldDelegate
+
+- (BOOL)passcodeField:(BKPasscodeField *)aPasscodeField shouldInsertText:(NSString *)aText
+{
+    return self.isEnabled;
+}
+
+- (BOOL)passcodeFieldShouldDeleteBackward:(BKPasscodeField *)aPasscodeField
+{
+    return self.isEnabled;
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if (!self.isEnabled) {
+    if (self.isEnabled == NO) {
+        return NO;
+    }
+    
+    NSUInteger length = textField.text.length - range.length + string.length;
+    if (length > self.maximumLength) {
         return NO;
     }
     
@@ -307,11 +338,16 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if ([self.delegate respondsToSelector:@selector(passcodeInputViewDidFinish:)]) {
-        [self.delegate passcodeInputViewDidFinish:self];
+    if (self.isEnabled == NO) {
+        return NO;
     }
     
-    return NO;
+    if ([self.delegate respondsToSelector:@selector(passcodeInputViewDidFinish:)]) {
+        [self.delegate passcodeInputViewDidFinish:self];
+        return NO;
+    } else {
+        return YES; // default behavior
+    }
 }
 
 @end

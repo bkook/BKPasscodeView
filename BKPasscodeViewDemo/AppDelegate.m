@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "BKPasscodeViewController.h"
+#import "MainViewController.h"
 
 @implementation AppDelegate
 
@@ -17,11 +17,11 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] init];
+    MainViewController *viewController = [[MainViewController alloc] initWithStyle:UITableViewStyleGrouped];
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     
-    self.window.rootViewController = viewController;
+    self.window.rootViewController = navController;
     
     [self.window makeKeyAndVisible];
     

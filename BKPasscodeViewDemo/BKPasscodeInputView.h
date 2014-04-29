@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "BKPasscodeField.h"
+
 typedef enum : NSUInteger {
     BKPasscodeInputViewNumericPasscodeStyle,
     BKPasscodeInputViewNormalPasscodeStyle,
@@ -17,19 +19,20 @@ typedef enum : NSUInteger {
 @protocol BKPasscodeInputViewDelegate;
 
 
-@interface BKPasscodeInputView : UIView <UITextFieldDelegate>
+@interface BKPasscodeInputView : UIView <UITextFieldDelegate, BKPasscodeFieldDelegate>
 
 @property (nonatomic, assign) id<BKPasscodeInputViewDelegate> delegate;
 
 @property (nonatomic) BKPasscodeInputViewPasscodeStyle  passcodeStyle;
+@property (nonatomic) NSUInteger                        maximumLength;
 
 @property (nonatomic, strong) NSString                  *title;
 @property (nonatomic, strong) NSString                  *message;
 @property (nonatomic, strong) NSString                  *errorMessage;
-
 @property (nonatomic, getter = isEnabled) BOOL          enabled;
+@property (nonatomic, strong) NSString                  *passcode;
 
-@property (nonatomic, readonly) NSString                *passcode;
+@property (nonatomic, strong, readonly) UIControl       *passcodeControl;
 
 + (void)configureTitleLabel:(UILabel *)aLabel;
 + (void)configureMessageLabel:(UILabel *)aLabel;
