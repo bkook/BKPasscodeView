@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DF13276E1927BD2800B5D8CB /* BKPasscodeField.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1327671927BD2800B5D8CB /* BKPasscodeField.m */; };
-		DF13276F1927BD2800B5D8CB /* BKPasscodeInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1327691927BD2800B5D8CB /* BKPasscodeInputView.m */; };
-		DF1327701927BD2800B5D8CB /* BKPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF13276B1927BD2800B5D8CB /* BKPasscodeViewController.m */; };
-		DF1327711927BD2800B5D8CB /* BKShiftingPasscodeInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF13276D1927BD2800B5D8CB /* BKShiftingPasscodeInputView.m */; };
+		DF1327931927DA4900B5D8CB /* BKPasscodeField.m in Sources */ = {isa = PBXBuildFile; fileRef = DF13278C1927DA4900B5D8CB /* BKPasscodeField.m */; };
+		DF1327941927DA4900B5D8CB /* BKPasscodeInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF13278E1927DA4900B5D8CB /* BKPasscodeInputView.m */; };
+		DF1327951927DA4900B5D8CB /* BKPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1327901927DA4900B5D8CB /* BKPasscodeViewController.m */; };
+		DF1327961927DA4900B5D8CB /* BKShiftingPasscodeInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1327921927DA4900B5D8CB /* BKShiftingPasscodeInputView.m */; };
 		DF346E4F190BF66600E850F9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF346E4E190BF66600E850F9 /* MainViewController.m */; };
 		DF831317190D12E000148DB2 /* UIView+Shake.m in Sources */ = {isa = PBXBuildFile; fileRef = DF831316190D12E000148DB2 /* UIView+Shake.m */; };
 		DF831319190D133A00148DB2 /* LICENSE-UIView+Shake in Resources */ = {isa = PBXBuildFile; fileRef = DF831318190D133A00148DB2 /* LICENSE-UIView+Shake */; };
@@ -39,14 +39,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DF1327661927BD2800B5D8CB /* BKPasscodeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeField.h; sourceTree = "<group>"; };
-		DF1327671927BD2800B5D8CB /* BKPasscodeField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeField.m; sourceTree = "<group>"; };
-		DF1327681927BD2800B5D8CB /* BKPasscodeInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeInputView.h; sourceTree = "<group>"; };
-		DF1327691927BD2800B5D8CB /* BKPasscodeInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeInputView.m; sourceTree = "<group>"; };
-		DF13276A1927BD2800B5D8CB /* BKPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeViewController.h; sourceTree = "<group>"; };
-		DF13276B1927BD2800B5D8CB /* BKPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeViewController.m; sourceTree = "<group>"; };
-		DF13276C1927BD2800B5D8CB /* BKShiftingPasscodeInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKShiftingPasscodeInputView.h; sourceTree = "<group>"; };
-		DF13276D1927BD2800B5D8CB /* BKShiftingPasscodeInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKShiftingPasscodeInputView.m; sourceTree = "<group>"; };
+		DF13278B1927DA4900B5D8CB /* BKPasscodeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeField.h; sourceTree = "<group>"; };
+		DF13278C1927DA4900B5D8CB /* BKPasscodeField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeField.m; sourceTree = "<group>"; };
+		DF13278D1927DA4900B5D8CB /* BKPasscodeInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeInputView.h; sourceTree = "<group>"; };
+		DF13278E1927DA4900B5D8CB /* BKPasscodeInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeInputView.m; sourceTree = "<group>"; };
+		DF13278F1927DA4900B5D8CB /* BKPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeViewController.h; sourceTree = "<group>"; };
+		DF1327901927DA4900B5D8CB /* BKPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeViewController.m; sourceTree = "<group>"; };
+		DF1327911927DA4900B5D8CB /* BKShiftingPasscodeInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKShiftingPasscodeInputView.h; sourceTree = "<group>"; };
+		DF1327921927DA4900B5D8CB /* BKShiftingPasscodeInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKShiftingPasscodeInputView.m; sourceTree = "<group>"; };
 		DF346E4D190BF66600E850F9 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		DF346E4E190BF66600E850F9 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		DF831312190D0C7B00148DB2 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -95,17 +95,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DF1327651927BD2800B5D8CB /* BKPasscodeView */ = {
+		DF13278A1927DA4900B5D8CB /* BKPasscodeView */ = {
 			isa = PBXGroup;
 			children = (
-				DF1327661927BD2800B5D8CB /* BKPasscodeField.h */,
-				DF1327671927BD2800B5D8CB /* BKPasscodeField.m */,
-				DF1327681927BD2800B5D8CB /* BKPasscodeInputView.h */,
-				DF1327691927BD2800B5D8CB /* BKPasscodeInputView.m */,
-				DF13276A1927BD2800B5D8CB /* BKPasscodeViewController.h */,
-				DF13276B1927BD2800B5D8CB /* BKPasscodeViewController.m */,
-				DF13276C1927BD2800B5D8CB /* BKShiftingPasscodeInputView.h */,
-				DF13276D1927BD2800B5D8CB /* BKShiftingPasscodeInputView.m */,
+				DF13278B1927DA4900B5D8CB /* BKPasscodeField.h */,
+				DF13278C1927DA4900B5D8CB /* BKPasscodeField.m */,
+				DF13278D1927DA4900B5D8CB /* BKPasscodeInputView.h */,
+				DF13278E1927DA4900B5D8CB /* BKPasscodeInputView.m */,
+				DF13278F1927DA4900B5D8CB /* BKPasscodeViewController.h */,
+				DF1327901927DA4900B5D8CB /* BKPasscodeViewController.m */,
+				DF1327911927DA4900B5D8CB /* BKShiftingPasscodeInputView.h */,
+				DF1327921927DA4900B5D8CB /* BKShiftingPasscodeInputView.m */,
 			);
 			path = BKPasscodeView;
 			sourceTree = "<group>";
@@ -132,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				DF831313190D12AA00148DB2 /* Externals */,
+				DF13278A1927DA4900B5D8CB /* BKPasscodeView */,
 				DFB107BA1903ECF70038FB05 /* BKPasscodeViewDemo */,
 				DFB107D31903ECF70038FB05 /* BKPasscodeViewDemoTests */,
 				DFB107B31903ECF70038FB05 /* Frameworks */,
@@ -162,7 +163,6 @@
 		DFB107BA1903ECF70038FB05 /* BKPasscodeViewDemo */ = {
 			isa = PBXGroup;
 			children = (
-				DF1327651927BD2800B5D8CB /* BKPasscodeView */,
 				DFB107C31903ECF70038FB05 /* AppDelegate.h */,
 				DFB107C41903ECF70038FB05 /* AppDelegate.m */,
 				DF346E4D190BF66600E850F9 /* MainViewController.h */,
@@ -302,13 +302,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DF1327701927BD2800B5D8CB /* BKPasscodeViewController.m in Sources */,
-				DF13276E1927BD2800B5D8CB /* BKPasscodeField.m in Sources */,
+				DF1327951927DA4900B5D8CB /* BKPasscodeViewController.m in Sources */,
+				DF1327931927DA4900B5D8CB /* BKPasscodeField.m in Sources */,
 				DF831317190D12E000148DB2 /* UIView+Shake.m in Sources */,
 				DFB107C51903ECF70038FB05 /* AppDelegate.m in Sources */,
 				DF346E4F190BF66600E850F9 /* MainViewController.m in Sources */,
-				DF13276F1927BD2800B5D8CB /* BKPasscodeInputView.m in Sources */,
-				DF1327711927BD2800B5D8CB /* BKShiftingPasscodeInputView.m in Sources */,
+				DF1327941927DA4900B5D8CB /* BKPasscodeInputView.m in Sources */,
+				DF1327961927DA4900B5D8CB /* BKShiftingPasscodeInputView.m in Sources */,
 				DFB107C11903ECF70038FB05 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

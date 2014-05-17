@@ -26,6 +26,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSString                      *oldPasscode;
 @property (nonatomic, strong) NSString                      *changedPasscode;
 @property (nonatomic, strong) NSTimer                       *lockStateUpdateTimer;
+@property (nonatomic) CGFloat                               keyboardHeight;
 
 @end
 
@@ -45,7 +46,6 @@ typedef enum : NSUInteger {
         
         // keyboard notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowNotification:) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillHideNotification:) name:UIKeyboardWillHideNotification object:nil];
     }
     return self;
 }
@@ -81,9 +81,20 @@ typedef enum : NSUInteger {
     [self lockIfNeeded];
 }
 
-- (UIRectEdge)edgesForExtendedLayout
+- (void)viewDidLayoutSubviews
 {
-    return UIRectEdgeNone;
+    [super viewDidLayoutSubviews];
+    
+    CGRect frame = self.view.bounds;
+    
+    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+        
+        CGFloat topBarOffset = [self.topLayoutGuide length];
+        frame.origin.y += topBarOffset;
+        frame.size.height -= (topBarOffset + self.keyboardHeight);
+    }
+    
+    self.shiftingPasscodeInputView.frame = frame;
 }
 
 #pragma mark - Public methods
@@ -339,14 +350,11 @@ typedef enum : NSUInteger {
     CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
     
+    self.keyboardHeight = keyboardRect.size.height;
+    
     CGRect rect = self.view.bounds;
     rect.size.height -= keyboardRect.size.height;
     self.shiftingPasscodeInputView.frame = rect;
-}
-
-- (void)didReceiveKeyboardWillHideNotification:(NSNotification *)notification
-{
-    self.shiftingPasscodeInputView.frame = self.view.bounds;
 }
 
 @end
