@@ -66,7 +66,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/bkook/BKPasscodeView.git", :commit => "b95486490bbffaa22b0007c19ab9d208efe5fea2" }
+  s.source       = { :git => "https://github.com/bkook/BKPasscodeView.git", :commit => "774d683ab798a3ca6b9071644e651e10bd9cc919" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
