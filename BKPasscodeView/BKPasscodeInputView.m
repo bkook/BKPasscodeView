@@ -112,9 +112,8 @@
             
             BKPasscodeField *passcodeField = [[BKPasscodeField alloc] init];
             [passcodeField setDelegate:self];
-            [passcodeField sizeToFit];
-            [passcodeField addTarget:self action:@selector(passcodeControlEditingChanged:) forControlEvents:UIControlEventEditingChanged];
             [passcodeField setMaximumLength:self.maximumLength];
+            [passcodeField addTarget:self action:@selector(passcodeControlEditingChanged:) forControlEvents:UIControlEventEditingChanged];
             [self setPasscodeControl:passcodeField];
             break;
         }
@@ -228,8 +227,9 @@
     [super layoutSubviews];
     
     // layout passcode control to center
+    [self.passcodeControl sizeToFit];
+    
     if ([self.passcodeControl isKindOfClass:[UITextField class]]) {
-        [self.passcodeControl sizeToFit];
         self.passcodeControl.frame = CGRectMake(0, 0, self.frame.size.width - kTextLeftRightSpace * 2.0f, CGRectGetHeight(self.passcodeControl.frame) + 10.0f);
     }
 
@@ -288,7 +288,13 @@
 
 - (BOOL)canResignFirstResponder
 {
-    return NO;
+    return self.canDismissKeyboard;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    [self.passcodeControl becomeFirstResponder];
 }
 
 #pragma mark - Actions

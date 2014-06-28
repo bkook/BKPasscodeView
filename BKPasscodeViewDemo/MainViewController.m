@@ -11,6 +11,7 @@
 @interface MainViewController ()
 
 @property (strong, nonatomic) UISwitch          *simplePasscodeSwitch;
+@property (strong, nonatomic) UISwitch          *customizeAppearanceSwitch;
 
 @property (strong, nonatomic) NSString          *passcode;
 
@@ -25,9 +26,6 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        _simplePasscodeSwitch = [[UISwitch alloc] init];
-        [_simplePasscodeSwitch setOn:YES];
-        
         self.passcode = @"1234";
     }
     return self;
@@ -37,6 +35,14 @@
 {
     [super viewDidLoad];
     
+    _simplePasscodeSwitch = [[UISwitch alloc] init];
+    [_simplePasscodeSwitch setOn:YES];
+    
+    _customizeAppearanceSwitch = [[UISwitch alloc] init];
+    [_customizeAppearanceSwitch setOn:NO];
+    
+    self.title = @"BKPasscodeViewDemo";
+    
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"reuseIdentifier"];
 }
 
@@ -44,7 +50,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -56,6 +62,7 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"reuseIdentifier" forIndexPath:indexPath];
     cell.accessoryView = nil;
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     switch (indexPath.section) {
         case 0:
@@ -70,12 +77,24 @@
         case 3:
             cell.textLabel.text = @"Use simple passcode";
             cell.accessoryView = self.simplePasscodeSwitch;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             break;
-        default:
+        case 4:
+            cell.textLabel.text = @"Customize appearance";
+            cell.accessoryView = self.customizeAppearanceSwitch;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             break;
     }
     
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    if (section == 4) {
+        return @"Default password is 1234";
+    }
+    return nil;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -86,9 +105,18 @@
     return nil;
 }
 
+- (BKPasscodeViewController *)createPasscodeViewController
+{
+    if (self.customizeAppearanceSwitch.isOn) {
+        return [[BKCustomPasscodeViewController alloc] initWithNibName:nil bundle:nil];
+    } else {
+        return [[BKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] init];
+    BKPasscodeViewController *viewController = [self createPasscodeViewController];
     viewController.delegate = self;
     
     switch (indexPath.section) {

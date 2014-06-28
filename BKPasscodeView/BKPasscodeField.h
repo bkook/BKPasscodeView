@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @protocol BKPasscodeFieldDelegate;
+@protocol BKPasscodeFieldImageSource;
 
 @interface BKPasscodeField : UIControl <UIKeyInput, UIInputViewAudioFeedback>
 
 // delegate
 @property (nonatomic, assign) id<BKPasscodeFieldDelegate> delegate;
+@property (nonatomic, assign) id<BKPasscodeFieldImageSource> imageSource;
 
 // passcode
 @property (nonatomic, strong) NSString      *passcode;
@@ -31,7 +33,29 @@
 @protocol BKPasscodeFieldDelegate <NSObject>
 
 @optional
+/**
+ * Ask the delegate that whether passcode field accepts text.
+ * If you want to accept entering text, return YES.
+ */
 - (BOOL)passcodeField:(BKPasscodeField *)aPasscodeField shouldInsertText:(NSString *)aText;
+
+/**
+ * Ask the delegate that whether passcode can be deleted.
+ * If you want to accept deleting passcode, return YES.
+ */
 - (BOOL)passcodeFieldShouldDeleteBackward:(BKPasscodeField *)aPasscodeField;
+
+@end
+
+
+@protocol BKPasscodeFieldImageSource <NSObject>
+
+@optional
+
+/**
+ * Ask the image source for a image to display passcode digit at index.
+ * If you don't implement this, default shape (line for blank digit and circule for filled digit) will be displayed.
+ */
+- (UIImage *)passcodeField:(BKPasscodeField *)aPasscodeField dotImageAtIndex:(NSInteger)aIndex filled:(BOOL)aFilled;
 
 @end

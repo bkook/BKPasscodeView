@@ -201,24 +201,48 @@
     CGPoint origin = CGPointMake(floorf((self.frame.size.width - contentSize.width) * 0.5f),
                                  floorf((self.frame.size.height - contentSize.height) * 0.5f));
     
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, self.dotColor.CGColor);
-    
-    for (NSUInteger i = 0; i < self.maximumLength; i++) {
-
-        if (i < self.mutablePasscode.length) {
-            // draw circle
-            CGRect circleFrame = CGRectMake(origin.x, origin.y, self.dotSize.width, self.dotSize.height);
-            CGContextFillEllipseInRect(context, circleFrame);
-        } else {
-            // draw line
-            CGRect lineFrame = CGRectMake(origin.x, origin.y + floorf((self.dotSize.height - self.lineHeight) * 0.5f),
-                                          self.dotSize.width, self.lineHeight);
-            CGContextFillRect(context, lineFrame);
+    if ([self.imageSource respondsToSelector:@selector(passcodeField:dotImageAtIndex:filled:)]) {
+        
+        for (NSUInteger i = 0; i < self.maximumLength; i++) {
+            
+            UIImage *image = nil;
+            
+            if (i < self.mutablePasscode.length) {
+                // draw filled image
+                image = [self.imageSource passcodeField:self dotImageAtIndex:i filled:YES];
+            } else {
+                // draw blank image
+                image = [self.imageSource passcodeField:self dotImageAtIndex:i filled:NO];
+            }
+            
+            if (image) {
+                CGRect imageFrame = CGRectMake(origin.x, origin.y, self.dotSize.width, self.dotSize.height);
+                [image drawInRect:imageFrame];
+            }
+            
+            origin.x += (self.dotSize.width + self.dotSpacing);
         }
         
-        origin.x += (self.dotSize.width + self.dotSpacing);
+    } else {
+        
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetFillColorWithColor(context, self.dotColor.CGColor);
+        
+        for (NSUInteger i = 0; i < self.maximumLength; i++) {
+            
+            if (i < self.mutablePasscode.length) {
+                // draw circle
+                CGRect circleFrame = CGRectMake(origin.x, origin.y, self.dotSize.width, self.dotSize.height);
+                CGContextFillEllipseInRect(context, circleFrame);
+            } else {
+                // draw line
+                CGRect lineFrame = CGRectMake(origin.x, origin.y + floorf((self.dotSize.height - self.lineHeight) * 0.5f),
+                                              self.dotSize.width, self.lineHeight);
+                CGContextFillRect(context, lineFrame);
+            }
+            
+            origin.x += (self.dotSize.width + self.dotSpacing);
+        }
     }
 }
 

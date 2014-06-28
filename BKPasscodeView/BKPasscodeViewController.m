@@ -45,7 +45,8 @@ typedef enum : NSUInteger {
         _currentState = BKPasscodeViewControllerStateUnknown;
         
         // keyboard notifications
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowNotification:) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowHideNotification:) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowHideNotification:) name:UIKeyboardWillHideNotification object:nil];
     }
     return self;
 }
@@ -56,6 +57,10 @@ typedef enum : NSUInteger {
     self.lockStateUpdateTimer = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)customizePasscodeInputView:(BKPasscodeInputView *)aPasscodeInputView
+{
 }
 
 - (void)viewDidLoad
@@ -75,7 +80,11 @@ typedef enum : NSUInteger {
     }
     
     [self updatePasscodeInputViewTitle:self.shiftingPasscodeInputView.passcodeInputView];
+    
+    [self customizePasscodeInputView:self.shiftingPasscodeInputView.passcodeInputView];
+    
     [self.view addSubview:self.shiftingPasscodeInputView];
+    
     [self.shiftingPasscodeInputView becomeFirstResponder];
     
     [self lockIfNeeded];
@@ -108,13 +117,6 @@ typedef enum : NSUInteger {
 {
     return self.shiftingPasscodeInputView.passcodeInputView.passcodeStyle;
 }
-
-//- (void)lockWithTimeInterval:(NSTimeInterval)timeInterval
-//{
-//    NSDate *lockUntil = [NSDate dateWithTimeIntervalSinceNow:timeInterval];
-//    
-//    [self showLockMessageWithLockUntilDate:lockUntil];
-//}
 
 - (void)showLockMessageWithLockUntilDate:(NSDate *)lockUntil
 {
@@ -260,6 +262,7 @@ typedef enum : NSUInteger {
                     self.currentState = BKPasscodeViewControllerStateInputPassword;
                     
                     [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionForward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
+                        [self customizePasscodeInputView:inputView];
                         [self updatePasscodeInputViewTitle:inputView];
                     }];
                     
@@ -313,6 +316,7 @@ typedef enum : NSUInteger {
                 self.currentState = BKPasscodeViewControllerStateReinputPassword;
                 
                 [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionForward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
+                    [self customizePasscodeInputView:inputView];
                     [self updatePasscodeInputViewTitle:inputView];
                 }];
                 
@@ -331,6 +335,7 @@ typedef enum : NSUInteger {
                 self.currentState = BKPasscodeViewControllerStateInputPassword;
                 
                 [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionBackward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
+                    [self customizePasscodeInputView:inputView];
                     [self updatePasscodeInputViewTitle:inputView];
                     inputView.message = NSLocalizedStringFromTable(@"Passcodes did not match.\nTry again.", @"BKPasscodeView", @"암호가 일치하지 않습니다.\n다시 시도하십시오.");
                 }];
@@ -345,16 +350,27 @@ typedef enum : NSUInteger {
 
 #pragma mark - Notifications
 
-- (void)didReceiveKeyboardWillShowNotification:(NSNotification *)notification
+- (void)didReceiveKeyboardWillShowHideNotification:(NSNotification *)notification
 {
+    NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    UIViewAnimationCurve curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    
     CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
     
-    self.keyboardHeight = keyboardRect.size.height;
+    CGRect intersectsRect = CGRectIntersection(keyboardRect, self.view.bounds);
     
-    CGRect rect = self.view.bounds;
-    rect.size.height -= keyboardRect.size.height;
-    self.shiftingPasscodeInputView.frame = rect;
+    self.keyboardHeight = CGRectGetHeight(intersectsRect);
+    
+    [UIView animateWithDuration:duration animations:^{
+
+        [UIView setAnimationCurve:curve];
+        
+        CGRect rect = self.view.bounds;
+        rect.size.height -= intersectsRect.size.height;
+        self.shiftingPasscodeInputView.frame = rect;
+    }];
 }
 
 @end

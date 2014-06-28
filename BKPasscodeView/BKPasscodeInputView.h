@@ -25,6 +25,7 @@ typedef enum : NSUInteger {
 
 @property (nonatomic) BKPasscodeInputViewPasscodeStyle  passcodeStyle;
 @property (nonatomic) NSUInteger                        maximumLength;
+@property (nonatomic, assign) BOOL                      canDismissKeyboard;
 
 @property (nonatomic, strong) NSString                  *title;
 @property (nonatomic, strong) NSString                  *message;
@@ -34,6 +35,7 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, strong, readonly) UIControl       *passcodeControl;
 
+// You can override these methods to customize message label appearance.
 + (void)configureTitleLabel:(UILabel *)aLabel;
 + (void)configureMessageLabel:(UILabel *)aLabel;
 + (void)configureErrorMessageLabel:(UILabel *)aLabel;
@@ -43,6 +45,9 @@ typedef enum : NSUInteger {
 
 @protocol BKPasscodeInputViewDelegate <NSObject>
 
+/**
+ * Tells the delegate that maximum length of passcode is entered or user tapped Done button in the keyboard (in case of BKPasscodeInputViewNormalPasscodeStyle).
+ */
 - (void)passcodeInputViewDidFinish:(BKPasscodeInputView *)aInputView;
 
 @end
