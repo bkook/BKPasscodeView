@@ -8,7 +8,7 @@
 
 #import "BKPasscodeViewController.h"
 #import "BKShiftingPasscodeInputView.h"
-#import "UIView+Shake.h"
+#import "AFViewShaker.h"
 
 typedef enum : NSUInteger {
     BKPasscodeViewControllerStateUnknown,
@@ -27,6 +27,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSString                      *changedPasscode;
 @property (nonatomic, strong) NSTimer                       *lockStateUpdateTimer;
 @property (nonatomic) CGFloat                               keyboardHeight;
+@property (nonatomic, strong) AFViewShaker                  *viewShaker;
 
 @end
 
@@ -36,11 +37,6 @@ typedef enum : NSUInteger {
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // create view
-        _shiftingPasscodeInputView = [[BKShiftingPasscodeInputView alloc] init];
-        _shiftingPasscodeInputView.passcodeInputViewDelegate = self;
-        _shiftingPasscodeInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        
         // init state
         _currentState = BKPasscodeViewControllerStateUnknown;
         
@@ -68,8 +64,11 @@ typedef enum : NSUInteger {
     [super viewDidLoad];
     
     [self.view setBackgroundColor:[UIColor colorWithRed:0.94 green:0.94 blue:0.96 alpha:1]];
-    
-    self.shiftingPasscodeInputView.frame = self.view.bounds;
+
+    // create view
+    self.shiftingPasscodeInputView = [[BKShiftingPasscodeInputView alloc] initWithFrame:self.view.bounds];
+    self.shiftingPasscodeInputView.passcodeInputViewDelegate = self;
+    self.shiftingPasscodeInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
     if (self.currentState == BKPasscodeViewControllerStateUnknown) {
         if (self.type == BKPasscodeViewControllerNewPasscodeType) {
@@ -290,7 +289,8 @@ typedef enum : NSUInteger {
                 aInputView.passcode = nil;
                 
                 // shake
-                [aInputView.passcodeControl shake:5 withDelta:10 andSpeed:0.08f];
+                self.viewShaker = [[AFViewShaker alloc] initWithView:aInputView.passcodeControl];
+                [self.viewShaker shakeWithDuration:0.5f completion:nil];
                 
                 // lock if needed
                 if ([self.delegate respondsToSelector:@selector(passcodeViewControllerLockUntilDate:)]) {
