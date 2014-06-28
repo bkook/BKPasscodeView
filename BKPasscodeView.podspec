@@ -17,7 +17,8 @@ Pod::Spec.new do |s|
 
   s.name         = "BKPasscodeView"
   s.version      = "0.0.1"
-  s.summary      = "Customizable passcode view controller for iOS. It supports for setting, changing and authenticating a passcode. Simple numeric passcode or normal passcode can be used."
+  s.summary      = "Customizable passcode view controller for iOS."
+  s.description  = "It supports for setting, changing and authenticating a passcode. Simple numeric passcode or normal passcode can be used."
   s.homepage     = "https://github.com/bkook/BKPasscodeView"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
@@ -51,7 +52,7 @@ Pod::Spec.new do |s|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  s.platform     = :ios, "4.3"
+  s.platform     = :ios
   # s.platform     = :ios, "5.0"
 
   #  When using multiple platforms
@@ -65,7 +66,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/bkook/BKPasscodeView.git", :commit => "dd0238e66f4131da50320817f68d750f7c880e42" }
+  s.source       = { :git => "https://github.com/bkook/BKPasscodeView.git", :commit => "b95486490bbffaa22b0007c19ab9d208efe5fea2" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -115,11 +116,11 @@ Pod::Spec.new do |s|
   #  where they will only apply to your library. If you depend on other Podspecs
   #  you can include multiple dependencies to ensure it works.
 
-  # s.requires_arc = true
+  s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
   
-  s.dependency "UIView+Shake", "~> 0.3"
+  s.dependency "AFViewShaker", "~> 0.0"
 
 end
