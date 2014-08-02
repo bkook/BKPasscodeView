@@ -10,14 +10,6 @@
 
 @interface MainViewController ()
 
-@property (strong, nonatomic) UISwitch          *simplePasscodeSwitch;
-@property (strong, nonatomic) UISwitch          *customizeAppearanceSwitch;
-
-@property (strong, nonatomic) NSString          *passcode;
-
-@property (nonatomic) NSUInteger                failedAttempts;
-@property (strong, nonatomic) NSDate            *lockUntilDate;
-
 @end
 
 @implementation MainViewController
@@ -41,6 +33,9 @@
     _customizeAppearanceSwitch = [[UISwitch alloc] init];
     [_customizeAppearanceSwitch setOn:NO];
     
+    _lockWhenEnterBackgroundSwitch = [[UISwitch alloc] init];
+    [_lockWhenEnterBackgroundSwitch setOn:NO];
+    
     self.title = @"BKPasscodeViewDemo";
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"reuseIdentifier"];
@@ -50,12 +45,16 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 5;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    if (section == 3) {
+        return 3;
+    } else {
+        return 1;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -75,13 +74,16 @@
             cell.textLabel.text = @"Check passcode";
             break;
         case 3:
-            cell.textLabel.text = @"Use simple passcode";
-            cell.accessoryView = self.simplePasscodeSwitch;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            break;
-        case 4:
-            cell.textLabel.text = @"Customize appearance";
-            cell.accessoryView = self.customizeAppearanceSwitch;
+            if (indexPath.row == 0) {
+                cell.textLabel.text = @"Use simple passcode";
+                cell.accessoryView = self.simplePasscodeSwitch;
+            } else if (indexPath.row == 1) {
+                cell.textLabel.text = @"Customize appearance";
+                cell.accessoryView = self.customizeAppearanceSwitch;
+            } else {
+                cell.textLabel.text = @"Lock when enter background";
+                cell.accessoryView = self.lockWhenEnterBackgroundSwitch;
+            }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             break;
     }
@@ -91,7 +93,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (section == 4) {
+    if (section == 3) {
         return @"Default password is 1234";
     }
     return nil;
@@ -208,7 +210,7 @@
             break;
     }
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [aViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

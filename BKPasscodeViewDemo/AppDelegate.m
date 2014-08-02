@@ -9,20 +9,25 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 
+@interface AppDelegate ()
+
+@property (strong, nonatomic) MainViewController        *mainViewController;
+
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[BKPasscodeLockScreenManager sharedManager] activateWithDelegate:self];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    MainViewController *viewController = [[MainViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    self.mainViewController = [[MainViewController alloc] initWithStyle:UITableViewStyleGrouped];
     
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
     self.window.rootViewController = navController;
-    
     [self.window makeKeyAndVisible];
     
     return YES;
@@ -53,6 +58,21 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)lockScreenManagerShouldShowLockScreen:(BKPasscodeLockScreenManager *)aManager
+{
+    return self.mainViewController.lockWhenEnterBackgroundSwitch.isOn;
+}
+
+- (UIViewController *)lockScreenManagerPasscodeViewController:(BKPasscodeLockScreenManager *)aManager
+{
+    BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
+    viewController.type = BKPasscodeViewControllerCheckPasscodeType;
+    viewController.delegate = self.mainViewController;
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    return navController;
 }
 
 @end

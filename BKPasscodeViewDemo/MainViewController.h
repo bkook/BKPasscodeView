@@ -12,4 +12,12 @@
 
 @interface MainViewController : UITableViewController <BKPasscodeViewControllerDelegate>
 
+@property (strong, nonatomic) UISwitch          *simplePasscodeSwitch;
+@property (strong, nonatomic) UISwitch          *customizeAppearanceSwitch;
+@property (strong, nonatomic) UISwitch          *lockWhenEnterBackgroundSwitch;
+
+@property (strong, nonatomic) NSString          *passcode;
+@property (nonatomic) NSUInteger                failedAttempts;
+@property (strong, nonatomic) NSDate            *lockUntilDate;
+
 @end
