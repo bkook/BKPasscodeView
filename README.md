@@ -1,9 +1,10 @@
 BKPasscodeView
 ==============
-- iOS7 style passcode view - supports set password, change password and authenticate password.
-- customizable lock policy for too many failure attempts.
-- You can customize appearance of passcode digits.
-
+- iOS7 style passcode view. Supports create, change and authenticate password.
+- Customizable lock policy for too many failure attempts.
+- Customizable passcode digit appearance.
+- Shows lock scrren when application entered background state. Use ```BKPasscodeLockScreenManager```
+- You can authenticate passcode asynchronously. (e.g. using API to authenticate passcode)
 
 ## Screenshots
 
