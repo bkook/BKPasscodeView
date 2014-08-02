@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9210C6BDEB024677854573A9 /* libPods-BKPasscodeViewDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ABC33D963A44C07A5DBFDFB /* libPods-BKPasscodeViewDemo.a */; };
 		DF1327931927DA4900B5D8CB /* BKPasscodeField.m in Sources */ = {isa = PBXBuildFile; fileRef = DF13278C1927DA4900B5D8CB /* BKPasscodeField.m */; };
 		DF1327941927DA4900B5D8CB /* BKPasscodeInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF13278E1927DA4900B5D8CB /* BKPasscodeInputView.m */; };
 		DF1327951927DA4900B5D8CB /* BKPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1327901927DA4900B5D8CB /* BKPasscodeViewController.m */; };
 		DF1327961927DA4900B5D8CB /* BKShiftingPasscodeInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1327921927DA4900B5D8CB /* BKShiftingPasscodeInputView.m */; };
 		DF346E4F190BF66600E850F9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF346E4E190BF66600E850F9 /* MainViewController.m */; };
 		DF793EDC195EA3FC00CBE33D /* BKCustomPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF793EDB195EA3FC00CBE33D /* BKCustomPasscodeViewController.m */; };
-		DF793EE0195EF2CB00CBE33D /* AFViewShaker.m in Sources */ = {isa = PBXBuildFile; fileRef = DF793EDF195EF2CB00CBE33D /* AFViewShaker.m */; };
 		DFB107B51903ECF70038FB05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B41903ECF70038FB05 /* Foundation.framework */; };
 		DFB107B71903ECF70038FB05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B61903ECF70038FB05 /* CoreGraphics.framework */; };
 		DFB107B91903ECF70038FB05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B81903ECF70038FB05 /* UIKit.framework */; };
@@ -39,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3ABC33D963A44C07A5DBFDFB /* libPods-BKPasscodeViewDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BKPasscodeViewDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5ABBE7FDE09469EB79B80B2 /* Pods-BKPasscodeViewDemo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BKPasscodeViewDemo.xcconfig"; path = "Pods/Pods-BKPasscodeViewDemo.xcconfig"; sourceTree = "<group>"; };
 		DF13278B1927DA4900B5D8CB /* BKPasscodeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeField.h; sourceTree = "<group>"; };
 		DF13278C1927DA4900B5D8CB /* BKPasscodeField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeField.m; sourceTree = "<group>"; };
 		DF13278D1927DA4900B5D8CB /* BKPasscodeInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeInputView.h; sourceTree = "<group>"; };
@@ -51,8 +53,6 @@
 		DF346E4E190BF66600E850F9 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		DF793EDA195EA3FC00CBE33D /* BKCustomPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKCustomPasscodeViewController.h; sourceTree = "<group>"; };
 		DF793EDB195EA3FC00CBE33D /* BKCustomPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKCustomPasscodeViewController.m; sourceTree = "<group>"; };
-		DF793EDE195EF2CB00CBE33D /* AFViewShaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFViewShaker.h; sourceTree = "<group>"; };
-		DF793EDF195EF2CB00CBE33D /* AFViewShaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFViewShaker.m; sourceTree = "<group>"; };
 		DF831312190D0C7B00148DB2 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DFB107B11903ECF70038FB05 /* BKPasscodeViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BKPasscodeViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFB107B41903ECF70038FB05 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -80,6 +80,7 @@
 				DFB107B71903ECF70038FB05 /* CoreGraphics.framework in Frameworks */,
 				DFB107B91903ECF70038FB05 /* UIKit.framework in Frameworks */,
 				DFB107B51903ECF70038FB05 /* Foundation.framework in Frameworks */,
+				9210C6BDEB024677854573A9 /* libPods-BKPasscodeViewDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,33 +114,15 @@
 			path = BKPasscodeView;
 			sourceTree = "<group>";
 		};
-		DF793EDD195EF2CB00CBE33D /* AFViewShaker */ = {
-			isa = PBXGroup;
-			children = (
-				DF793EDE195EF2CB00CBE33D /* AFViewShaker.h */,
-				DF793EDF195EF2CB00CBE33D /* AFViewShaker.m */,
-			);
-			name = AFViewShaker;
-			path = AFViewShaker/AFViewShaker;
-			sourceTree = "<group>";
-		};
-		DF831313190D12AA00148DB2 /* Externals */ = {
-			isa = PBXGroup;
-			children = (
-				DF793EDD195EF2CB00CBE33D /* AFViewShaker */,
-			);
-			path = Externals;
-			sourceTree = "<group>";
-		};
 		DFB107A81903ECF70038FB05 = {
 			isa = PBXGroup;
 			children = (
-				DF831313190D12AA00148DB2 /* Externals */,
 				DF13278A1927DA4900B5D8CB /* BKPasscodeView */,
 				DFB107BA1903ECF70038FB05 /* BKPasscodeViewDemo */,
 				DFB107D31903ECF70038FB05 /* BKPasscodeViewDemoTests */,
 				DFB107B31903ECF70038FB05 /* Frameworks */,
 				DFB107B21903ECF70038FB05 /* Products */,
+				C5ABBE7FDE09469EB79B80B2 /* Pods-BKPasscodeViewDemo.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -159,6 +142,7 @@
 				DFB107B61903ECF70038FB05 /* CoreGraphics.framework */,
 				DFB107B81903ECF70038FB05 /* UIKit.framework */,
 				DFB107CD1903ECF70038FB05 /* XCTest.framework */,
+				3ABC33D963A44C07A5DBFDFB /* libPods-BKPasscodeViewDemo.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -212,9 +196,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DFB107DD1903ECF70038FB05 /* Build configuration list for PBXNativeTarget "BKPasscodeViewDemo" */;
 			buildPhases = (
+				1E876CF7E4B34E0BB647D081 /* Check Pods Manifest.lock */,
 				DFB107AD1903ECF70038FB05 /* Sources */,
 				DFB107AE1903ECF70038FB05 /* Frameworks */,
 				DFB107AF1903ECF70038FB05 /* Resources */,
+				D00C41506E3D446FB304120A /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -299,12 +285,44 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1E876CF7E4B34E0BB647D081 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D00C41506E3D446FB304120A /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-BKPasscodeViewDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		DFB107AD1903ECF70038FB05 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DF793EE0195EF2CB00CBE33D /* AFViewShaker.m in Sources */,
 				DF1327951927DA4900B5D8CB /* BKPasscodeViewController.m in Sources */,
 				DF1327931927DA4900B5D8CB /* BKPasscodeField.m in Sources */,
 				DFB107C51903ECF70038FB05 /* AppDelegate.m in Sources */,
@@ -427,6 +445,7 @@
 		};
 		DFB107DE1903ECF70038FB05 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C5ABBE7FDE09469EB79B80B2 /* Pods-BKPasscodeViewDemo.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -449,6 +468,7 @@
 		};
 		DFB107DF1903ECF70038FB05 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C5ABBE7FDE09469EB79B80B2 /* Pods-BKPasscodeViewDemo.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
