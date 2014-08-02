@@ -15,6 +15,8 @@
 
 @interface BKPasscodeLockScreenManager : NSObject <BKPasscodeDummyViewControllerDelegate>
 
+@property (assign, nonatomic) id<BKPasscodeLockScreenManagerDelegate> delegate;
+
 @property (nonatomic, readonly, getter = isActivated) BOOL activated;
 
 /**
@@ -25,7 +27,7 @@
 /**
  * Activates manager. If manager is activated, it shows lock screen when application entered background.
  */
-- (void)activateWithDelegate:(id<BKPasscodeLockScreenManagerDelegate>)aDelegate;
+- (void)activate;
 
 /**
  * Deactivate manager. If manager is deactivated, lock screen will not shown at any time.

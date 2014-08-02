@@ -13,8 +13,6 @@ static BKPasscodeLockScreenManager *_sharedManager;
 
 @interface BKPasscodeLockScreenManager ()
 
-@property (assign, nonatomic) id<BKPasscodeLockScreenManagerDelegate> delegate;
-
 @property (nonatomic) BOOL                      activated;
 @property (strong, nonatomic) UIWindow          *lockScreenWindow;
 
@@ -57,9 +55,10 @@ static BKPasscodeLockScreenManager *_sharedManager;
     return _lockScreenWindow;
 }
 
-- (void)activateWithDelegate:(id<BKPasscodeLockScreenManagerDelegate>)aDelegate
+- (void)activate
 {
-    _delegate = aDelegate;
+    NSAssert(self.delegate, @"delegate must be set before activate");
+    
     self.activated = YES;
 }
 
