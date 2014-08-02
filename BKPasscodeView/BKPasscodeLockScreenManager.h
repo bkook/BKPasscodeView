@@ -17,27 +17,15 @@
 
 @property (assign, nonatomic) id<BKPasscodeLockScreenManagerDelegate> delegate;
 
-@property (nonatomic, readonly, getter = isActivated) BOOL activated;
-
 /**
  * Shared(singleton) instance.
  */
 + (BKPasscodeLockScreenManager *)sharedManager;
 
 /**
- * Activates manager. If manager is activated, it shows lock screen when application entered background.
+ * Shows lock screen. You should call this method at applicationDidEnterBackground: in app delegate.
  */
-- (void)activate;
-
-/**
- * Deactivate manager. If manager is deactivated, lock screen will not shown at any time.
- */
-- (void)deactivate;
-
-/**
- * Shows lock screen immediately. Before show lock screen you must activate manager first.
- */
-- (void)showLockScreenNow:(BOOL)animated;
+- (void)showLockScreen:(BOOL)animated;
 
 @end
 
@@ -56,5 +44,10 @@
  * If delegate does not implement this method, the lock screen will be shown everytime when application did enter background.
  */
 - (BOOL)lockScreenManagerShouldShowLockScreen:(BKPasscodeLockScreenManager *)aManager;
+
+/**
+ * Ask the delegate for the view that will be used as snapshot.
+ */
+- (UIView *)lockScreenManagerBlindView:(BKPasscodeLockScreenManager *)aManager;
 
 @end

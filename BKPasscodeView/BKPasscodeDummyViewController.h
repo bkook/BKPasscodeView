@@ -20,6 +20,7 @@
 
 @protocol BKPasscodeDummyViewControllerDelegate <NSObject>
 
+- (void)dummyViewControllerWillAppear:(BKPasscodeDummyViewController *)aViewController;
 - (void)dummyViewControllerDidAppear:(BKPasscodeDummyViewController *)aViewController;
 
 @end
