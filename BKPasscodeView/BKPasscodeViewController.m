@@ -122,10 +122,16 @@ typedef enum : NSUInteger {
     return self.shiftingPasscodeInputView.passcodeInputView.passcodeStyle;
 }
 
-- (void)setPasscodeStyle:(BKPasscodeInputViewPasscodeStyle)passcodeStyle keyboardType:(UIKeyboardType)keyboardType
+- (void)setKeyboardType:(UIKeyboardType)keyboardType
 {
-    [self.shiftingPasscodeInputView.passcodeInputView setPasscodeStyle:passcodeStyle keyboardType:keyboardType];
+    self.shiftingPasscodeInputView.passcodeInputView.keyboardType = keyboardType;
 }
+
+- (UIKeyboardType)keyboardType
+{
+    return self.shiftingPasscodeInputView.passcodeInputView.keyboardType;
+}
+
 
 - (void)showLockMessageWithLockUntilDate:(NSDate *)lockUntil
 {
@@ -299,7 +305,7 @@ typedef enum : NSUInteger {
                 aInputView.passcode = nil;
                 
                 // shake
-                self.viewShaker = [[AFViewShaker alloc] initWithView:aInputView.passcodeControl];
+                self.viewShaker = [[AFViewShaker alloc] initWithView:aInputView.passcodeField];
                 [self.viewShaker shakeWithDuration:0.5f completion:nil];
                 
                 // lock if needed
