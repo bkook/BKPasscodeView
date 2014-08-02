@@ -19,7 +19,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[BKPasscodeLockScreenManager sharedManager] activateWithDelegate:self];
+    [[BKPasscodeLockScreenManager sharedManager] setDelegate:self];
+    [[BKPasscodeLockScreenManager sharedManager] activate];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
