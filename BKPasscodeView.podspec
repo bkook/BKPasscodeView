@@ -16,11 +16,11 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BKPasscodeView"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "Customizable passcode view controller for iOS."
   s.description  = "It supports for setting, changing and authenticating a passcode. Simple numeric passcode or normal passcode can be used."
   s.homepage     = "https://github.com/bkook/BKPasscodeView"
-  # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
+  s.screenshots  = "https://raw.githubusercontent.com/bkook/BKPasscodeView/master/Screenshots/passcode_01.png", "https://raw.githubusercontent.com/bkook/BKPasscodeView/master/Screenshots/passcode_02.png"
 
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -66,7 +66,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/bkook/BKPasscodeView.git", :commit => "774d683ab798a3ca6b9071644e651e10bd9cc919" }
+  s.source       = { :git => "https://github.com/bkook/BKPasscodeView.git", :tag => "0.0.2" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -78,7 +78,7 @@ Pod::Spec.new do |s|
   #
 
   s.source_files  = "BKPasscodeView/**/*.{h,m}"
-  s.exclude_files = "Externals"
+  s.exclude_files = "Pods"
 
   # s.public_header_files = "Classes/**/*.h"
 
