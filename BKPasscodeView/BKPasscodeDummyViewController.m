@@ -21,6 +21,13 @@
     self.view.backgroundColor = [UIColor clearColor];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.delegate dummyViewControllerWillAppear:self];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];

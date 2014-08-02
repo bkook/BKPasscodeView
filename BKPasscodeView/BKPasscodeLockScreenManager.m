@@ -13,8 +13,9 @@ static BKPasscodeLockScreenManager *_sharedManager;
 
 @interface BKPasscodeLockScreenManager ()
 
-@property (nonatomic) BOOL                      activated;
 @property (strong, nonatomic) UIWindow          *lockScreenWindow;
+@property (strong, nonatomic) UIWindow          *mainWindow;
+@property (strong, nonatomic) UIView            *blindView;
 
 @end
 
@@ -29,47 +30,20 @@ static BKPasscodeLockScreenManager *_sharedManager;
     return _sharedManager;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(didReceiveDidEnterBackgroundNotification:)
-                                                     name:UIApplicationDidEnterBackgroundNotification
-                                                   object:nil];
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (UIWindow *)lockScreenWindow
 {
     if (nil == _lockScreenWindow) {
         _lockScreenWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        _lockScreenWindow.windowLevel = UIWindowLevelAlert;
     }
     return _lockScreenWindow;
 }
 
-- (void)activate
+- (void)showLockScreen:(BOOL)animated
 {
-    NSAssert(self.delegate, @"delegate must be set before activate");
+    NSAssert(self.delegate, @"delegate is not assigned.");
     
-    self.activated = YES;
-}
-
-- (void)deactivate
-{
-    self.activated = NO;
-}
-
-- (void)didReceiveDidEnterBackgroundNotification:(NSNotification *)aNotification
-{
-    if (NO == self.isActivated) {
+    if (_lockScreenWindow && _lockScreenWindow.rootViewController) {
         return;
     }
     
@@ -79,28 +53,44 @@ static BKPasscodeLockScreenManager *_sharedManager;
         }
     }
     
-    [self showLockScreenNow:NO];
-}
-
-- (void)showLockScreenNow:(BOOL)animated
-{
-    NSAssert(self.delegate, @"delegate is not assigned.");
-    NSAssert(self.isActivated, @"manager is not activated.");
+    // get the main window
+    self.mainWindow = [[UIApplication sharedApplication] keyWindow];
     
-    if (_lockScreenWindow && _lockScreenWindow.rootViewController) {
-        return;
+    // add blind view
+    if ([self.delegate respondsToSelector:@selector(lockScreenManagerBlindView:)]) {
+        self.blindView = [self.delegate lockScreenManagerBlindView:self];
     }
     
+    if (nil == self.blindView) {
+        self.blindView = [[UIView alloc] init];
+        self.blindView.backgroundColor = [UIColor whiteColor];
+    }
+    
+    self.blindView.frame = self.mainWindow.bounds;
+    self.blindView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    [self.mainWindow addSubview:self.blindView];
+    
+    // resign key window
+    [self.mainWindow resignKeyWindow];
+    
+    // set dummy view controller as root view controller
     BKPasscodeDummyViewController *dummyViewController = [[BKPasscodeDummyViewController alloc] init];
     self.lockScreenWindow.rootViewController = dummyViewController;
-    
     [self.lockScreenWindow makeKeyAndVisible];
     
+    // present lock screen
     UIViewController *lockScreenViewController = [self.delegate lockScreenManagerPasscodeViewController:self];
-    
     [self.lockScreenWindow.rootViewController presentViewController:lockScreenViewController animated:animated completion:nil];
     
     dummyViewController.delegate = self;
+}
+
+- (void)dummyViewControllerWillAppear:(BKPasscodeDummyViewController *)aViewController
+{
+    // remove blind view
+    [self.blindView removeFromSuperview];
+    self.blindView = nil;
 }
 
 - (void)dummyViewControllerDidAppear:(BKPasscodeDummyViewController *)aViewController
@@ -108,6 +98,9 @@ static BKPasscodeLockScreenManager *_sharedManager;
     [self.lockScreenWindow resignKeyWindow];
     self.lockScreenWindow.rootViewController = nil;
     self.lockScreenWindow = nil;
+    
+    [self.mainWindow makeKeyAndVisible];
+    self.mainWindow = nil;
 }
 
 @end
