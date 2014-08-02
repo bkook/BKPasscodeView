@@ -48,6 +48,8 @@ typedef enum : NSUInteger {
         // keyboard notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowHideNotification:) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowHideNotification:) name:UIKeyboardWillHideNotification object:nil];
+        
+        self.keyboardHeight = 216;      // sometimes keyboard notification is not posted at all. so setting default value.
     }
     return self;
 }
@@ -89,9 +91,14 @@ typedef enum : NSUInteger {
     self.shiftingPasscodeInputView.frame = self.view.bounds;
     [self.view addSubview:self.shiftingPasscodeInputView];
     
-    [self.shiftingPasscodeInputView becomeFirstResponder];
-    
     [self lockIfNeeded];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.shiftingPasscodeInputView becomeFirstResponder];
 }
 
 - (void)viewDidLayoutSubviews
@@ -100,13 +107,14 @@ typedef enum : NSUInteger {
     
     CGRect frame = self.view.bounds;
     
+    CGFloat topBarOffset = 0;
     if ([self respondsToSelector:@selector(topLayoutGuide)]) {
-        
-        CGFloat topBarOffset = [self.topLayoutGuide length];
-        frame.origin.y += topBarOffset;
-        frame.size.height -= (topBarOffset + self.keyboardHeight);
+        topBarOffset = [self.topLayoutGuide length];
     }
     
+    frame.origin.y += topBarOffset;
+    frame.size.height -= (topBarOffset + self.keyboardHeight);
+
     self.shiftingPasscodeInputView.frame = frame;
 }
 
@@ -131,7 +139,6 @@ typedef enum : NSUInteger {
 {
     return self.shiftingPasscodeInputView.passcodeInputView.keyboardType;
 }
-
 
 - (void)showLockMessageWithLockUntilDate:(NSDate *)lockUntil
 {
@@ -376,25 +383,15 @@ typedef enum : NSUInteger {
 
 - (void)didReceiveKeyboardWillShowHideNotification:(NSNotification *)notification
 {
-    NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    
-    UIViewAnimationCurve curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    
     CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
     
-    CGRect intersectsRect = CGRectIntersection(keyboardRect, self.view.bounds);
+    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+        self.keyboardHeight = CGRectGetHeight(keyboardRect);
+    } else {
+        self.keyboardHeight = CGRectGetWidth(keyboardRect);
+    }
     
-    self.keyboardHeight = CGRectGetHeight(intersectsRect);
-    
-    [UIView animateWithDuration:duration animations:^{
-
-        [UIView setAnimationCurve:curve];
-        
-        CGRect rect = self.view.bounds;
-        rect.size.height -= intersectsRect.size.height;
-        self.shiftingPasscodeInputView.frame = rect;
-    }];
+    [self.view setNeedsLayout];
 }
 
 @end
