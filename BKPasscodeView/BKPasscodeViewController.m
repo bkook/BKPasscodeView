@@ -40,6 +40,11 @@ typedef enum : NSUInteger {
         // init state
         _currentState = BKPasscodeViewControllerStateUnknown;
         
+        // create view
+        self.shiftingPasscodeInputView = [[BKShiftingPasscodeInputView alloc] init];
+        self.shiftingPasscodeInputView.passcodeInputViewDelegate = self;
+        self.shiftingPasscodeInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        
         // keyboard notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowHideNotification:) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowHideNotification:) name:UIKeyboardWillHideNotification object:nil];
@@ -64,17 +69,16 @@ typedef enum : NSUInteger {
     [super viewDidLoad];
     
     [self.view setBackgroundColor:[UIColor colorWithRed:0.94 green:0.94 blue:0.96 alpha:1]];
-
-    // create view
-    self.shiftingPasscodeInputView = [[BKShiftingPasscodeInputView alloc] initWithFrame:self.view.bounds];
-    self.shiftingPasscodeInputView.passcodeInputViewDelegate = self;
-    self.shiftingPasscodeInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
     if (self.currentState == BKPasscodeViewControllerStateUnknown) {
-        if (self.type == BKPasscodeViewControllerNewPasscodeType) {
-            self.currentState = BKPasscodeViewControllerStateInputPassword;
-        } else {
-            self.currentState = BKPasscodeViewControllerStateCheckPassword;
+        
+        switch (self.type) {
+            case BKPasscodeViewControllerNewPasscodeType:
+                self.currentState = BKPasscodeViewControllerStateInputPassword;
+                break;
+            default:
+                self.currentState = BKPasscodeViewControllerStateCheckPassword;
+                break;
         }
     }
     
@@ -82,6 +86,7 @@ typedef enum : NSUInteger {
     
     [self customizePasscodeInputView:self.shiftingPasscodeInputView.passcodeInputView];
     
+    self.shiftingPasscodeInputView.frame = self.view.bounds;
     [self.view addSubview:self.shiftingPasscodeInputView];
     
     [self.shiftingPasscodeInputView becomeFirstResponder];
@@ -116,6 +121,17 @@ typedef enum : NSUInteger {
 {
     return self.shiftingPasscodeInputView.passcodeInputView.passcodeStyle;
 }
+
+- (void)setKeyboardType:(UIKeyboardType)keyboardType
+{
+    self.shiftingPasscodeInputView.passcodeInputView.keyboardType = keyboardType;
+}
+
+- (UIKeyboardType)keyboardType
+{
+    return self.shiftingPasscodeInputView.passcodeInputView.keyboardType;
+}
+
 
 - (void)showLockMessageWithLockUntilDate:(NSDate *)lockUntil
 {
@@ -252,55 +268,63 @@ typedef enum : NSUInteger {
     switch (self.currentState) {
         case BKPasscodeViewControllerStateCheckPassword:
         {
-            if ([self.delegate respondsToSelector:@selector(passcodeViewController:shouldAuthenticatePasscode:)] &&
-                [self.delegate passcodeViewController:self shouldAuthenticatePasscode:passcode])
-            {
-                if (self.type == BKPasscodeViewControllerChangePasscodeType) {
+            NSAssert([self.delegate respondsToSelector:@selector(passcodeViewController:authenticatePasscode:resultHandler:)],
+                     @"delegate must implement passcodeViewController:authenticatePasscode:resultHandler:");
+            
+            [self.delegate passcodeViewController:self authenticatePasscode:passcode resultHandler:^(BOOL succeed) {
+                
+                NSAssert([NSThread isMainThread], @"you must invoke result handler in main thread.");
+                
+                if (succeed) {
                     
-                    self.oldPasscode = passcode;
-                    self.currentState = BKPasscodeViewControllerStateInputPassword;
-                    
-                    [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionForward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
-                        [self customizePasscodeInputView:inputView];
-                        [self updatePasscodeInputViewTitle:inputView];
-                    }];
+                    if (self.type == BKPasscodeViewControllerChangePasscodeType) {
+                        
+                        self.oldPasscode = passcode;
+                        self.currentState = BKPasscodeViewControllerStateInputPassword;
+                        
+                        [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionForward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
+                            [self customizePasscodeInputView:inputView];
+                            [self updatePasscodeInputViewTitle:inputView];
+                        }];
+                        
+                    } else {
+                        
+                        [self.delegate passcodeViewController:self didFinishWithPasscode:passcode];
+                        
+                    }
                     
                 } else {
                     
-                    [self.delegate passcodeViewController:self didFinishWithPasscode:passcode];
+                    if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidFailAttempt:)]) {
+                        [self.delegate passcodeViewControllerDidFailAttempt:self];
+                    }
+                    
+                    NSUInteger failCount = 0;
+                    
+                    if ([self.delegate respondsToSelector:@selector(passcodeViewControllerNumberOfFailedAttempts:)]) {
+                        failCount = [self.delegate passcodeViewControllerNumberOfFailedAttempts:self];
+                    }
+                    
+                    [self showFailedAttemptsCount:failCount inputView:aInputView];
+                    
+                    // reset entered passcode
+                    aInputView.passcode = nil;
+                    
+                    // shake
+                    self.viewShaker = [[AFViewShaker alloc] initWithView:aInputView.passcodeField];
+                    [self.viewShaker shakeWithDuration:0.5f completion:nil];
+                    
+                    // lock if needed
+                    if ([self.delegate respondsToSelector:@selector(passcodeViewControllerLockUntilDate:)]) {
+                        NSDate *lockUntilDate = [self.delegate passcodeViewControllerLockUntilDate:self];
+                        if (lockUntilDate != nil) {
+                            [self showLockMessageWithLockUntilDate:lockUntilDate];
+                        }
+                    }
                     
                 }
-
-            } else {
-                
-                if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidFailAttempt:)]) {
-                    [self.delegate passcodeViewControllerDidFailAttempt:self];
-                }
-                
-                NSUInteger failCount = 0;
-
-                if ([self.delegate respondsToSelector:@selector(passcodeViewControllerNumberOfFailedAttempts:)]) {
-                    failCount = [self.delegate passcodeViewControllerNumberOfFailedAttempts:self];
-                }
-
-                [self showFailedAttemptsCount:failCount inputView:aInputView];
-                
-                // reset entered passcode
-                aInputView.passcode = nil;
-                
-                // shake
-                self.viewShaker = [[AFViewShaker alloc] initWithView:aInputView.passcodeControl];
-                [self.viewShaker shakeWithDuration:0.5f completion:nil];
-                
-                // lock if needed
-                if ([self.delegate respondsToSelector:@selector(passcodeViewControllerLockUntilDate:)]) {
-                    NSDate *lockUntilDate = [self.delegate passcodeViewControllerLockUntilDate:self];
-                    if (lockUntilDate != nil) {
-                        [self showLockMessageWithLockUntilDate:lockUntilDate];
-                    }
-                }
-
-            }
+            }];
+            
             break;
         }
         case BKPasscodeViewControllerStateInputPassword:

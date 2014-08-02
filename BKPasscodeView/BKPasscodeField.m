@@ -55,8 +55,14 @@
     [self setBackgroundColor:[UIColor clearColor]];
     
     _mutablePasscode = [[NSMutableString alloc] initWithCapacity:4];
-    
-    _nonDigitRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"[^0-9]+" options:0 error:nil];
+}
+
+- (NSRegularExpression *)nonDigitRegularExpression
+{
+    if (nil == _nonDigitRegularExpression) {
+        _nonDigitRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"[^0-9]+" options:0 error:nil];
+    }
+    return _nonDigitRegularExpression;
 }
 
 - (NSString *)passcode
@@ -91,8 +97,16 @@
         return;
     }
     
-    NSUInteger numberOfMatches = [self.nonDigitRegularExpression numberOfMatchesInString:text options:0 range:NSMakeRange(0, text.length)];
-    if (numberOfMatches > 0) {
+    if (self.keyboardType == UIKeyboardTypeNumberPad) {
+        text = [self.nonDigitRegularExpression stringByReplacingMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@""];
+    }
+    
+    if (text.length == 0) {
+        return;
+    }
+    
+    NSInteger newLength = self.mutablePasscode.length + text.length;
+    if (newLength > self.maximumLength) {
         return;
     }
     
@@ -102,12 +116,8 @@
         }
     }
     
-    if (self.mutablePasscode.length == self.maximumLength) {
-        return;
-    }
-    
     [self.mutablePasscode appendString:text];
-    
+
     [self setNeedsDisplay];
     
     [[UIDevice currentDevice] playInputClick];
@@ -163,11 +173,6 @@
 - (UIKeyboardAppearance)keyboardAppearance
 {
     return UIKeyboardAppearanceDefault;
-}
-
-- (UIKeyboardType)keyboardType
-{
-    return UIKeyboardTypeNumberPad;
 }
 
 - (UIReturnKeyType)returnKeyType

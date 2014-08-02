@@ -18,8 +18,8 @@
 {
     [super customizePasscodeInputView:aPasscodeInputView];
     
-    if ([aPasscodeInputView.passcodeControl isKindOfClass:[BKPasscodeField class]]) {
-        BKPasscodeField *passcodeField = (BKPasscodeField *)aPasscodeInputView.passcodeControl;
+    if ([aPasscodeInputView.passcodeField isKindOfClass:[BKPasscodeField class]]) {
+        BKPasscodeField *passcodeField = (BKPasscodeField *)aPasscodeInputView.passcodeField;
         passcodeField.imageSource = self;
         passcodeField.dotSize = CGSizeMake(32, 32);
     }
