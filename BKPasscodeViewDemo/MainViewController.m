@@ -147,16 +147,18 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (BOOL)passcodeViewController:(BKPasscodeViewController *)aViewController shouldAuthenticatePasscode:(NSString *)aPasscode
+#pragma mark - BKPasscodeViewControllerDelegate
+
+- (void)passcodeViewController:(BKPasscodeViewController *)aViewController authenticatePasscode:(NSString *)aPasscode resultHandler:(void (^)(BOOL))aResultHandler
 {
     if ([aPasscode isEqualToString:self.passcode]) {
-        
+
         self.lockUntilDate = nil;
         self.failedAttempts = 0;
         
-        return YES;
+        aResultHandler(YES);
     } else {
-        return NO;
+        aResultHandler(NO);
     }
 }
 

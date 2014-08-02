@@ -268,55 +268,63 @@ typedef enum : NSUInteger {
     switch (self.currentState) {
         case BKPasscodeViewControllerStateCheckPassword:
         {
-            if ([self.delegate respondsToSelector:@selector(passcodeViewController:shouldAuthenticatePasscode:)] &&
-                [self.delegate passcodeViewController:self shouldAuthenticatePasscode:passcode])
-            {
-                if (self.type == BKPasscodeViewControllerChangePasscodeType) {
+            NSAssert([self.delegate respondsToSelector:@selector(passcodeViewController:authenticatePasscode:resultHandler:)],
+                     @"delegate must implement passcodeViewController:authenticatePasscode:resultHandler:");
+            
+            [self.delegate passcodeViewController:self authenticatePasscode:passcode resultHandler:^(BOOL succeed) {
+                
+                NSAssert([NSThread isMainThread], @"you must invoke result handler in main thread.");
+                
+                if (succeed) {
                     
-                    self.oldPasscode = passcode;
-                    self.currentState = BKPasscodeViewControllerStateInputPassword;
-                    
-                    [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionForward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
-                        [self customizePasscodeInputView:inputView];
-                        [self updatePasscodeInputViewTitle:inputView];
-                    }];
+                    if (self.type == BKPasscodeViewControllerChangePasscodeType) {
+                        
+                        self.oldPasscode = passcode;
+                        self.currentState = BKPasscodeViewControllerStateInputPassword;
+                        
+                        [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionForward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
+                            [self customizePasscodeInputView:inputView];
+                            [self updatePasscodeInputViewTitle:inputView];
+                        }];
+                        
+                    } else {
+                        
+                        [self.delegate passcodeViewController:self didFinishWithPasscode:passcode];
+                        
+                    }
                     
                 } else {
                     
-                    [self.delegate passcodeViewController:self didFinishWithPasscode:passcode];
+                    if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidFailAttempt:)]) {
+                        [self.delegate passcodeViewControllerDidFailAttempt:self];
+                    }
+                    
+                    NSUInteger failCount = 0;
+                    
+                    if ([self.delegate respondsToSelector:@selector(passcodeViewControllerNumberOfFailedAttempts:)]) {
+                        failCount = [self.delegate passcodeViewControllerNumberOfFailedAttempts:self];
+                    }
+                    
+                    [self showFailedAttemptsCount:failCount inputView:aInputView];
+                    
+                    // reset entered passcode
+                    aInputView.passcode = nil;
+                    
+                    // shake
+                    self.viewShaker = [[AFViewShaker alloc] initWithView:aInputView.passcodeField];
+                    [self.viewShaker shakeWithDuration:0.5f completion:nil];
+                    
+                    // lock if needed
+                    if ([self.delegate respondsToSelector:@selector(passcodeViewControllerLockUntilDate:)]) {
+                        NSDate *lockUntilDate = [self.delegate passcodeViewControllerLockUntilDate:self];
+                        if (lockUntilDate != nil) {
+                            [self showLockMessageWithLockUntilDate:lockUntilDate];
+                        }
+                    }
                     
                 }
-
-            } else {
-                
-                if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidFailAttempt:)]) {
-                    [self.delegate passcodeViewControllerDidFailAttempt:self];
-                }
-                
-                NSUInteger failCount = 0;
-
-                if ([self.delegate respondsToSelector:@selector(passcodeViewControllerNumberOfFailedAttempts:)]) {
-                    failCount = [self.delegate passcodeViewControllerNumberOfFailedAttempts:self];
-                }
-
-                [self showFailedAttemptsCount:failCount inputView:aInputView];
-                
-                // reset entered passcode
-                aInputView.passcode = nil;
-                
-                // shake
-                self.viewShaker = [[AFViewShaker alloc] initWithView:aInputView.passcodeField];
-                [self.viewShaker shakeWithDuration:0.5f completion:nil];
-                
-                // lock if needed
-                if ([self.delegate respondsToSelector:@selector(passcodeViewControllerLockUntilDate:)]) {
-                    NSDate *lockUntilDate = [self.delegate passcodeViewControllerLockUntilDate:self];
-                    if (lockUntilDate != nil) {
-                        [self showLockMessageWithLockUntilDate:lockUntilDate];
-                    }
-                }
-
-            }
+            }];
+            
             break;
         }
         case BKPasscodeViewControllerStateInputPassword:

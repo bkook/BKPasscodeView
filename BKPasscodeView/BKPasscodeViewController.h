@@ -41,10 +41,14 @@ typedef enum : NSUInteger {
  */
 - (void)passcodeViewController:(BKPasscodeViewController *)aViewController didFinishWithPasscode:(NSString *)aPasscode;
 
+@optional
+
 /**
- * Ask the delegate to verify that a passcode is correct. Return YES if passcode is correct.
+ * Ask the delegate to verify that a passcode is correct. You must call the resultHandler with result.
+ * You can check passcode asynchronously and show progress view (e.g. UIActivityIndicator) in the view controller if authentication takes too long.
+ * You must call result handler in main thread.
  */
-- (BOOL)passcodeViewController:(BKPasscodeViewController *)aViewController shouldAuthenticatePasscode:(NSString *)aPasscode;
+- (void)passcodeViewController:(BKPasscodeViewController *)aViewController authenticatePasscode:(NSString *)aPasscode resultHandler:(void(^)(BOOL succeed))aResultHandler;
 
 /**
  * Tells the delegate that user entered incorrect passcode. 
