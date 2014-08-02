@@ -11,7 +11,6 @@
 @interface BKPasscodeField ()
 
 @property (strong, nonatomic) NSMutableString       *mutablePasscode;
-@property (strong, nonatomic) NSRegularExpression   *nonDigitRegularExpression;
 
 @end
 
@@ -56,7 +55,7 @@
     
     _mutablePasscode = [[NSMutableString alloc] initWithCapacity:4];
     
-    _nonDigitRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"[^0-9]+" options:0 error:nil];
+    _keyboardType = UIKeyboardTypeNumberPad;
 }
 
 - (NSString *)passcode
@@ -88,11 +87,6 @@
 - (void)insertText:(NSString *)text
 {
     if (self.enabled == NO) {
-        return;
-    }
-    
-    NSUInteger numberOfMatches = [self.nonDigitRegularExpression numberOfMatchesInString:text options:0 range:NSMakeRange(0, text.length)];
-    if (numberOfMatches > 0) {
         return;
     }
     
@@ -163,11 +157,6 @@
 - (UIKeyboardAppearance)keyboardAppearance
 {
     return UIKeyboardAppearanceDefault;
-}
-
-- (UIKeyboardType)keyboardType
-{
-    return UIKeyboardTypeNumberPad;
 }
 
 - (UIReturnKeyType)returnKeyType

@@ -24,6 +24,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) id<BKPasscodeInputViewDelegate> delegate;
 
 @property (nonatomic) BKPasscodeInputViewPasscodeStyle  passcodeStyle;
+@property (nonatomic, readonly) UIKeyboardType          keyboardType;
 @property (nonatomic) NSUInteger                        maximumLength;
 @property (nonatomic, assign) BOOL                      canDismissKeyboard;
 
@@ -34,6 +35,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSString                  *passcode;
 
 @property (nonatomic, strong, readonly) UIControl       *passcodeControl;
+
+- (void)setPasscodeStyle:(BKPasscodeInputViewPasscodeStyle)passcodeStyle keyboardType:(UIKeyboardType)keyboardType;
 
 // You can override these methods to customize message label appearance.
 + (void)configureTitleLabel:(UILabel *)aLabel;

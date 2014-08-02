@@ -27,6 +27,8 @@
 @property (nonatomic) CGFloat           	dotSpacing;
 @property (nonatomic, strong) UIColor       *dotColor;
 
+@property (nonatomic) UIKeyboardType        keyboardType;
+
 @end
 
 

@@ -69,7 +69,7 @@
     
     self.passcodeInputView = [[BKPasscodeInputView alloc] initWithFrame:nextFrame];
     self.passcodeInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.passcodeInputView.passcodeStyle = previousInputView.passcodeStyle;
+    [self.passcodeInputView setPasscodeStyle:previousInputView.passcodeStyle keyboardType:previousInputView.keyboardType];
     self.passcodeInputView.delegate = previousInputView.delegate;
     
     if (configBlock) {

@@ -24,6 +24,8 @@ typedef enum : NSUInteger {
 @property (nonatomic) BKPasscodeViewControllerType      type;
 @property (nonatomic) BKPasscodeInputViewPasscodeStyle  passcodeStyle;
 
+- (void)setPasscodeStyle:(BKPasscodeInputViewPasscodeStyle)passcodeStyle keyboardType:(UIKeyboardType)keyboardType;
+
 /**
  * Customize passcode input view
  * You may override to customize passcode input view appearance.

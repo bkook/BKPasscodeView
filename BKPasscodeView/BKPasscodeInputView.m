@@ -108,19 +108,24 @@
     switch (passcodeStyle) {
         case BKPasscodeInputViewNumericPasscodeStyle:
         {
-            _maximumLength = kDefaultNumericPasscodeMaximumLength;
+            if (_maximumLength == 0) {
+                _maximumLength = kDefaultNumericPasscodeMaximumLength;
+            }
             
             BKPasscodeField *passcodeField = [[BKPasscodeField alloc] init];
             [passcodeField setDelegate:self];
-            [passcodeField setMaximumLength:self.maximumLength];
+            [passcodeField setMaximumLength:_maximumLength];
             [passcodeField addTarget:self action:@selector(passcodeControlEditingChanged:) forControlEvents:UIControlEventEditingChanged];
+            [passcodeField setKeyboardType:UIKeyboardTypeNumberPad];
             [self setPasscodeControl:passcodeField];
             break;
         }
             
         case BKPasscodeInputViewNormalPasscodeStyle:
         {
-            _maximumLength = kDefaultNormalPasscodeMaximumLength;
+            if (_maximumLength == 0) {
+                _maximumLength = kDefaultNormalPasscodeMaximumLength;
+            }
             
             UITextField *textField = [[UITextField alloc] init];
             textField.delegate = self;
@@ -139,6 +144,18 @@
     }
     
     [self addSubview:_passcodeControl];
+}
+
+- (void)setPasscodeStyle:(BKPasscodeInputViewPasscodeStyle)passcodeStyle keyboardType:(UIKeyboardType)keyboardType
+{
+    [self setPasscodeStyle:passcodeStyle];
+    
+    [(id<UITextInputTraits>)self.passcodeControl setKeyboardType:keyboardType];
+}
+
+- (UIKeyboardType)keyboardType
+{
+    return [(id<UITextInputTraits>)self.passcodeControl keyboardType];
 }
 
 - (void)setMaximumLength:(NSUInteger)maximumLength
