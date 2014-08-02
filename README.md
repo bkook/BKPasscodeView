@@ -26,7 +26,9 @@ BKPasscodeView
 
 
 ## Example
-```obj-c
+
+### Presenting passcode view controller.
+```objc
 BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
 viewController.delegate = self;
 viewController.type = BKPasscodeViewControllerNewPasscodeType;
@@ -40,3 +42,32 @@ UINavigationController *navController = [[UINavigationController alloc] initWith
 [self presentViewController:navController animated:YES completion:nil];
 
 ```
+
+### Activate lock screen.
+```objc
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  // ...
+  
+  [[BKPasscodeLockScreenManager sharedManager] activateWithDelegate:self];
+  
+  // ...
+  return YES;
+}
+
+- (BOOL)lockScreenManagerShouldShowLockScreen:(BKPasscodeLockScreenManager *)aManager
+{
+  return YES;   // return NO if you don't want to present lock screen.
+}
+
+- (UIViewController *)lockScreenManagerPasscodeViewController:(BKPasscodeLockScreenManager *)aManager
+{
+    BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
+    viewController.type = BKPasscodeViewControllerCheckPasscodeType;
+    viewController.delegate = <# set delegate to authenticate passcode #>;
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    return navController;
+}
+```
+
