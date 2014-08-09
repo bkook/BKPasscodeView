@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BKPasscodeView"
-  s.version      = "0.0.7"
+  s.version      = "0.0.8"
   s.summary      = "Customizable passcode view controller for iOS."
   s.description  = "It supports for setting, changing and authenticating a passcode. Simple numeric passcode or normal passcode can be used."
   s.homepage     = "https://github.com/bkook/BKPasscodeView"
@@ -66,7 +66,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/bkook/BKPasscodeView.git", :tag => "0.0.7" }
+  s.source       = { :git => "https://github.com/bkook/BKPasscodeView.git", :tag => "0.0.8" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

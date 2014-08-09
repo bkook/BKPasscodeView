@@ -13,9 +13,9 @@ static BKPasscodeLockScreenManager *_sharedManager;
 
 @interface BKPasscodeLockScreenManager ()
 
-@property (strong, nonatomic) UIWindow          *lockScreenWindow;
-@property (strong, nonatomic) UIWindow          *mainWindow;
-@property (strong, nonatomic) UIView            *blindView;
+@property (strong, nonatomic) UIWindow  *mainWindow;
+@property (strong, nonatomic) UIWindow  *lockScreenWindow;
+@property (strong, nonatomic) UIView    *blindView;
 
 @end
 
@@ -30,19 +30,11 @@ static BKPasscodeLockScreenManager *_sharedManager;
     return _sharedManager;
 }
 
-- (UIWindow *)lockScreenWindow
-{
-    if (nil == _lockScreenWindow) {
-        _lockScreenWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    }
-    return _lockScreenWindow;
-}
-
 - (void)showLockScreen:(BOOL)animated
 {
     NSAssert(self.delegate, @"delegate is not assigned.");
     
-    if (_lockScreenWindow && _lockScreenWindow.rootViewController) {
+    if (self.lockScreenWindow && self.lockScreenWindow.rootViewController) {
         return;
     }
     
@@ -56,31 +48,42 @@ static BKPasscodeLockScreenManager *_sharedManager;
     self.mainWindow = [[UIApplication sharedApplication] keyWindow];
     
     // add blind view
+    UIView *blindView;
+    
     if ([self.delegate respondsToSelector:@selector(lockScreenManagerBlindView:)]) {
-        self.blindView = [self.delegate lockScreenManagerBlindView:self];
+        blindView = [self.delegate lockScreenManagerBlindView:self];
     }
     
     if (nil == self.blindView) {
-        self.blindView = [[UIView alloc] init];
-        self.blindView.backgroundColor = [UIColor whiteColor];
+        blindView = [[UIView alloc] init];
+        blindView.backgroundColor = [UIColor whiteColor];
     }
     
-    self.blindView.frame = self.mainWindow.bounds;
-    self.blindView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    blindView.frame = self.mainWindow.bounds;
+    blindView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    [self.mainWindow addSubview:self.blindView];
+    [self.mainWindow addSubview:blindView];
+    
+    self.blindView = blindView;
     
     // resign key window
     [self.mainWindow resignKeyWindow];
     
     // set dummy view controller as root view controller
     BKPasscodeDummyViewController *dummyViewController = [[BKPasscodeDummyViewController alloc] init];
-    self.lockScreenWindow.rootViewController = dummyViewController;
-    [self.lockScreenWindow makeKeyAndVisible];
+    
+    UIWindow *lockScreenWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    lockScreenWindow.windowLevel = self.mainWindow.windowLevel + 1;
+    lockScreenWindow.rootViewController = dummyViewController;
+    [lockScreenWindow makeKeyAndVisible];
+    
+    self.lockScreenWindow = lockScreenWindow;
     
     // present lock screen
     UIViewController *lockScreenViewController = [self.delegate lockScreenManagerPasscodeViewController:self];
     [self.lockScreenWindow.rootViewController presentViewController:lockScreenViewController animated:animated completion:nil];
+    
+    [lockScreenViewController.view.superview bringSubviewToFront:lockScreenViewController.view];
     
     dummyViewController.delegate = self;
 }
@@ -95,8 +98,13 @@ static BKPasscodeLockScreenManager *_sharedManager;
 - (void)dummyViewControllerDidAppear:(BKPasscodeDummyViewController *)aViewController
 {
     [self.lockScreenWindow resignKeyWindow];
-    self.lockScreenWindow.rootViewController = nil;
-    self.lockScreenWindow = nil;
+    self.lockScreenWindow.hidden = YES;
+    
+    if ([UIView instancesRespondToSelector:@selector(tintColor)]) {
+        self.lockScreenWindow = nil;
+    } else {
+        [self performSelector:@selector(setLockScreenWindow:) withObject:nil afterDelay:0.1f];      // workaround for wired dealloc on iOS 6
+    }
     
     [self.mainWindow makeKeyAndVisible];
     self.mainWindow = nil;
