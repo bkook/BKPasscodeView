@@ -79,6 +79,7 @@
 
 + (void)configureTitleLabel:(UILabel *)aLabel
 {
+    aLabel.backgroundColor = [UIColor clearColor];
     aLabel.numberOfLines = 1;
     aLabel.textAlignment = NSTextAlignmentCenter;
     aLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -87,6 +88,7 @@
 
 + (void)configureMessageLabel:(UILabel *)aLabel
 {
+    aLabel.backgroundColor = [UIColor clearColor];
     aLabel.numberOfLines = 0;
     aLabel.textAlignment = NSTextAlignmentCenter;
     aLabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -95,6 +97,7 @@
 
 + (void)configureErrorMessageLabel:(UILabel *)aLabel
 {
+    aLabel.backgroundColor = [UIColor clearColor];
     aLabel.numberOfLines = 0;
     aLabel.textAlignment = NSTextAlignmentCenter;
     aLabel.lineBreakMode = NSLineBreakByWordWrapping;

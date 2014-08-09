@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>28861FD6-A3D5-436F-BF91-BB1BA44DE27D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BKPasscodeViewDemo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>79B3F192D057AD253F66F1402DED80B0CBE2E637</key>
+		<string>github.com:bkook/BKPasscodeView.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BKPasscodeViewDemo.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>79B3F192D057AD253F66F1402DED80B0CBE2E637</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:bkook/BKPasscodeView.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>79B3F192D057AD253F66F1402DED80B0CBE2E637</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>79B3F192D057AD253F66F1402DED80B0CBE2E637</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BKPasscodeViewDemo</string>
+		</dict>
+	</array>
+</dict>
+</plist>

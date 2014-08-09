@@ -34,7 +34,6 @@ static BKPasscodeLockScreenManager *_sharedManager;
 {
     if (nil == _lockScreenWindow) {
         _lockScreenWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        _lockScreenWindow.windowLevel = UIWindowLevelAlert;
     }
     return _lockScreenWindow;
 }
