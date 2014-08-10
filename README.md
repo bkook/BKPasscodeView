@@ -27,7 +27,7 @@ BKPasscodeView
 
 ## Example
 
-### Presenting passcode view controller.
+### Presenting Passcode View Controller
 ```objc
 BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
 viewController.delegate = self;
@@ -43,16 +43,23 @@ UINavigationController *navController = [[UINavigationController alloc] initWith
 
 ```
 
-### Activate lock screen.
+### Show Lock Screen
 ```objc
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   // ...
   
-  [[BKPasscodeLockScreenManager sharedManager] activateWithDelegate:self];
+  [[BKPasscodeLockScreenManager sharedManager] setDelegate:self];
   
   // ...
   return YES;
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+  // ...
+  // show passcode view controller when enter background. Screen will be obscured from here.
+  [[BKPasscodeLockScreenManager sharedManager] showLockScreen:NO];
 }
 
 - (BOOL)lockScreenManagerShouldShowLockScreen:(BKPasscodeLockScreenManager *)aManager
@@ -62,12 +69,12 @@ UINavigationController *navController = [[UINavigationController alloc] initWith
 
 - (UIViewController *)lockScreenManagerPasscodeViewController:(BKPasscodeLockScreenManager *)aManager
 {
-    BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
-    viewController.type = BKPasscodeViewControllerCheckPasscodeType;
-    viewController.delegate = <# set delegate to authenticate passcode #>;
-    
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    return navController;
+  BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
+  viewController.type = BKPasscodeViewControllerCheckPasscodeType;
+  viewController.delegate = <# set delegate to authenticate passcode #>;
+  
+  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+  return navController;
 }
 ```
 
