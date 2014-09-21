@@ -32,7 +32,10 @@
 {
     [super viewDidAppear:animated];
     
-    [self.delegate dummyViewControllerDidAppear:self];
+    if (self.presentedViewController == nil) {
+        // only calls delegate when presented view controller(modal view controller) does not exists.
+        [self.delegate dummyViewControllerDidAppear:self];
+    }
 }
 
 @end
