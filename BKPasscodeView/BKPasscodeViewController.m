@@ -9,6 +9,7 @@
 #import "BKPasscodeViewController.h"
 #import "BKShiftingPasscodeInputView.h"
 #import "AFViewShaker.h"
+#import "BKPasscodeUtils.h"
 
 typedef enum : NSUInteger {
     BKPasscodeViewControllerStateUnknown,
@@ -392,10 +393,11 @@ typedef enum : NSUInteger {
 {
     CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
-        self.keyboardHeight = CGRectGetHeight(keyboardRect);
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        self.keyboardHeight = UIInterfaceOrientationIsPortrait(statusBarOrientation) ? CGRectGetHeight(keyboardRect) : CGRectGetWidth(keyboardRect);
     } else {
-        self.keyboardHeight = CGRectGetWidth(keyboardRect);
+        self.keyboardHeight = CGRectGetHeight(keyboardRect);
     }
     
     [self.view setNeedsLayout];
