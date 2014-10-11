@@ -5,6 +5,7 @@ BKPasscodeView
 - Customizable passcode digit appearance.
 - Shows lock scrren when application entered background state. Use ```BKPasscodeLockScreenManager```
 - You can authenticate passcode asynchronously. (e.g. using API to authenticate passcode)
+- Supports Touch ID API in iOS 8.
 
 ## Screenshots
 
@@ -23,6 +24,7 @@ BKPasscodeView
 | ```BKShiftingPasscodeInputView``` | A view that make a transition between two ```BKPasscodeInputView```. You can shift passcode views forward and backward. |
 | ```BKPasscodeViewController``` | A view controller that supports create, change and authenticate passcode. |
 | ```BKPasscodeLockScreenManager``` | A manager that shows lock screen when application entered background state. You can activate with ```activateWithDelegate:``` method. |
+| ```BKTouchIDManager``` | A manager that save, load and delete keychain item. It saves passcode to keychain and item cannot be accessed without fingerprint. |
 
 
 ## Example
@@ -37,6 +39,11 @@ viewController.type = BKPasscodeViewControllerNewPasscodeType;
 
 viewController.passcodeStyle = BKPasscodeInputViewNumericPasscodeStyle;
 // viewController.passcodeStyle = BKPasscodeInputViewNormalPasscodeStyle;    // for ASCII style passcode.
+
+// To supports Touch ID feature, set BKTouchIDManager instance to view controller.
+// It only supports iOS 8 or greater.
+viewController.touchIDManager = [[BKTouchIDManager alloc] initWithKeychainServiceName:@"<# your keychain service name #>"];
+viewController.touchIDManager.promptText = @"Scan fingerprint to authenticate";   // You can set prompt text.
 
 UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
 [self presentViewController:navController animated:YES completion:nil];
