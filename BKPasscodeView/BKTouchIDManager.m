@@ -9,9 +9,9 @@
 #import "BKTouchIDManager.h"
 #import <LocalAuthentication/LocalAuthentication.h>
 
-@interface BKTouchIDManager ()
-
-@property (nonatomic, strong) dispatch_queue_t  queue;
+@interface BKTouchIDManager () {
+    dispatch_queue_t _queue;
+}
 
 @property (nonatomic, strong) NSString          *keychainServiceName;
 
@@ -61,7 +61,7 @@
     NSString *serviceName = self.keychainServiceName;
     NSData *passcodeData = [passcode dataUsingEncoding:NSUTF8StringEncoding];
     
-    dispatch_async(self.queue, ^{
+    dispatch_async(_queue, ^{
         
         // try to update first
         BOOL success = [[self class] updateKeychainItemWithServiceName:serviceName data:passcodeData];
@@ -106,7 +106,7 @@
         query[(__bridge id)kSecUseOperationPrompt] = self.promptText;
     }
     
-    dispatch_async(self.queue, ^{
+    dispatch_async(_queue, ^{
         
         CFTypeRef dataTypeRef = NULL;
         
@@ -130,7 +130,7 @@
 
 - (void)deletePasscodeWithCompletionBlock:(void (^)(BOOL))completionBlock
 {
-    dispatch_async(self.queue, ^{
+    dispatch_async(_queue, ^{
         
         BOOL success = [[self class] deleteKeychainItemWithServiceName:self.keychainServiceName];
         
