@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BKPasscodeInputView.h"
+#import "BKTouchIDSwitchView.h"
+#import "BKTouchIDManager.h"
+
 
 typedef enum : NSUInteger {
     BKPasscodeViewControllerNewPasscodeType,
@@ -17,20 +20,25 @@ typedef enum : NSUInteger {
 
 @protocol BKPasscodeViewControllerDelegate;
 
-@interface BKPasscodeViewController : UIViewController <BKPasscodeInputViewDelegate>
+@interface BKPasscodeViewController : UIViewController <BKPasscodeInputViewDelegate, BKTouchIDSwitchViewDelegate>
 
 @property (nonatomic, assign) id<BKPasscodeViewControllerDelegate> delegate;
 
 @property (nonatomic) BKPasscodeViewControllerType      type;
 @property (nonatomic) BKPasscodeInputViewPasscodeStyle  passcodeStyle;
 @property (nonatomic) UIKeyboardType                    keyboardType;
-
+@property (nonatomic, strong) BKTouchIDManager          *touchIDManager;
 
 /**
  * Customize passcode input view
  * You may override to customize passcode input view appearance.
  */
 - (void)customizePasscodeInputView:(BKPasscodeInputView *)aPasscodeInputView;
+
+/**
+ * Prompts Touch ID view to scan fingerprint.
+ */
+- (void)startTouchIDAuthenticationIfPossible;
 
 @end
 
@@ -42,6 +50,11 @@ typedef enum : NSUInteger {
 - (void)passcodeViewController:(BKPasscodeViewController *)aViewController didFinishWithPasscode:(NSString *)aPasscode;
 
 @optional
+
+/**
+ * Tells the delegate that Touch ID error occured.
+ */
+- (void)passcodeViewControllerDidFailTouchIDKeychainOperation:(BKPasscodeViewController *)aViewController;
 
 /**
  * Ask the delegate to verify that a passcode is correct. You must call the resultHandler with result.
