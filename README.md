@@ -14,7 +14,8 @@ BKPasscodeView
 ![Screenshot](./Screenshots/passcode_03.png)
 ![Screenshot](./Screenshots/passcode_04.png)
 ![Screenshot](./Screenshots/passcode_05.png)
-
+![Screenshot](./Screenshots/passcode_06.png)
+![Screenshot](./Screenshots/passcode_07.png)
 
 ## Classes
 | Class | Description |
