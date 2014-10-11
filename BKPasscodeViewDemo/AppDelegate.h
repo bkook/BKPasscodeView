@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "BKPasscodeLockScreenManager.h"
 
+extern NSString *const BKPasscodeKeychainServiceName;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate, BKPasscodeLockScreenManagerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

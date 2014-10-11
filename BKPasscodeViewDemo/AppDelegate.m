@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 
+NSString *const BKPasscodeKeychainServiceName = @"BKPasscodeSampleService";
+
 @interface AppDelegate ()
 
 @property (strong, nonatomic) MainViewController        *mainViewController;
@@ -72,6 +74,9 @@
     BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
     viewController.type = BKPasscodeViewControllerCheckPasscodeType;
     viewController.delegate = self.mainViewController;
+    
+    viewController.touchIDManager = [[BKTouchIDManager alloc] initWithKeychainServiceName:BKPasscodeKeychainServiceName];
+    viewController.touchIDManager.promptText = @"Scan fingerprint to unlock";
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     return navController;

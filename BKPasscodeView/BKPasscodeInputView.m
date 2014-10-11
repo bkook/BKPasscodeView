@@ -167,6 +167,7 @@
                 textField.secureTextEntry = YES;
                 textField.font = [UIFont systemFontOfSize:25.0f];
                 textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+                textField.returnKeyType = UIReturnKeyDone;
                 
                 [self setPasscodeField:textField];
                 break;

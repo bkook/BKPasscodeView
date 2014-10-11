@@ -7,7 +7,7 @@
 //
 
 #import "BKPasscodeViewController.h"
-#import "BKShiftingPasscodeInputView.h"
+#import "BKShiftingView.h"
 #import "AFViewShaker.h"
 #import "BKPasscodeUtils.h"
 
@@ -22,13 +22,17 @@ typedef enum : NSUInteger {
 
 @interface BKPasscodeViewController ()
 
-@property (nonatomic, strong) BKShiftingPasscodeInputView   *shiftingPasscodeInputView;
+@property (nonatomic, strong) BKShiftingView                *shiftingView;
+@property (nonatomic, strong) BKPasscodeInputView           *passcodeInputView;
+
 @property (nonatomic) BKPasscodeViewControllerState         currentState;
 @property (nonatomic, strong) NSString                      *oldPasscode;
-@property (nonatomic, strong) NSString                      *changedPasscode;
+@property (nonatomic, strong) NSString                      *theNewPasscode;
 @property (nonatomic, strong) NSTimer                       *lockStateUpdateTimer;
 @property (nonatomic) CGFloat                               keyboardHeight;
 @property (nonatomic, strong) AFViewShaker                  *viewShaker;
+
+@property (nonatomic) BOOL                                  promptingTouchID;
 
 @end
 
@@ -41,14 +45,22 @@ typedef enum : NSUInteger {
         // init state
         _currentState = BKPasscodeViewControllerStateUnknown;
         
-        // create view
-        self.shiftingPasscodeInputView = [[BKShiftingPasscodeInputView alloc] init];
-        self.shiftingPasscodeInputView.passcodeInputViewDelegate = self;
-        self.shiftingPasscodeInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        // create shifting view
+        self.shiftingView = [[BKShiftingView alloc] init];
+        self.shiftingView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        
+        self.passcodeInputView = [[BKPasscodeInputView alloc] init];
+        self.passcodeInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.passcodeInputView.delegate = self;
+        self.shiftingView.currentView = self.passcodeInputView;
         
         // keyboard notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowHideNotification:) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowHideNotification:) name:UIKeyboardWillHideNotification object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveApplicationWillEnterForegroundNotification:)
+                                                     name:UIApplicationWillEnterForegroundNotification
+                                                   object:nil];
         
         self.keyboardHeight = 216;      // sometimes keyboard notification is not posted at all. so setting default value.
     }
@@ -85,12 +97,11 @@ typedef enum : NSUInteger {
         }
     }
     
-    [self updatePasscodeInputViewTitle:self.shiftingPasscodeInputView.passcodeInputView];
+    [self updatePasscodeInputViewTitle:self.passcodeInputView];
     
-    [self customizePasscodeInputView:self.shiftingPasscodeInputView.passcodeInputView];
+    [self customizePasscodeInputView:self.passcodeInputView];
     
-    self.shiftingPasscodeInputView.frame = self.view.bounds;
-    [self.view addSubview:self.shiftingPasscodeInputView];
+    [self.view addSubview:self.shiftingView];
     
     [self lockIfNeeded];
 }
@@ -99,7 +110,11 @@ typedef enum : NSUInteger {
 {
     [super viewWillAppear:animated];
     
-    [self.shiftingPasscodeInputView becomeFirstResponder];
+    if (self.passcodeInputView.isEnabled) {
+        [self startTouchIDAuthenticationIfPossible];
+    }
+    
+    [self.passcodeInputView becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -123,29 +138,29 @@ typedef enum : NSUInteger {
     frame.origin.y += topBarOffset;
     frame.size.height -= (topBarOffset + self.keyboardHeight);
 
-    self.shiftingPasscodeInputView.frame = frame;
+    self.shiftingView.frame = frame;
 }
 
 #pragma mark - Public methods
 
 - (void)setPasscodeStyle:(BKPasscodeInputViewPasscodeStyle)passcodeStyle
 {
-    self.shiftingPasscodeInputView.passcodeInputView.passcodeStyle = passcodeStyle;
+    self.passcodeInputView.passcodeStyle = passcodeStyle;
 }
 
 - (BKPasscodeInputViewPasscodeStyle)passcodeStyle
 {
-    return self.shiftingPasscodeInputView.passcodeInputView.passcodeStyle;
+    return self.passcodeInputView.passcodeStyle;
 }
 
 - (void)setKeyboardType:(UIKeyboardType)keyboardType
 {
-    self.shiftingPasscodeInputView.passcodeInputView.keyboardType = keyboardType;
+    self.passcodeInputView.keyboardType = keyboardType;
 }
 
 - (UIKeyboardType)keyboardType
 {
-    return self.shiftingPasscodeInputView.passcodeInputView.keyboardType;
+    return self.passcodeInputView.keyboardType;
 }
 
 - (void)showLockMessageWithLockUntilDate:(NSDate *)lockUntil
@@ -153,7 +168,7 @@ typedef enum : NSUInteger {
     NSTimeInterval timeInterval = [lockUntil timeIntervalSinceNow];
     NSUInteger minutes = ceilf(timeInterval / 60.0f);
     
-    BKPasscodeInputView *inputView = self.shiftingPasscodeInputView.passcodeInputView;
+    BKPasscodeInputView *inputView = self.passcodeInputView;
     inputView.enabled = NO;
     
     if (minutes == 1) {
@@ -181,22 +196,24 @@ typedef enum : NSUInteger {
     }
 }
 
-- (void)lockIfNeeded
+- (BOOL)lockIfNeeded
 {
     if (self.currentState != BKPasscodeViewControllerStateCheckPassword) {
-        return;
+        return NO;
     }
     
     if (NO == [self.delegate respondsToSelector:@selector(passcodeViewControllerLockUntilDate:)]) {
-        return;
+        return NO;
     }
     
     NSDate *lockUntil = [self.delegate passcodeViewControllerLockUntilDate:self];
     if (lockUntil == nil || [lockUntil timeIntervalSinceNow] < 0) {
-        return;
+        return NO;
     }
     
     [self showLockMessageWithLockUntilDate:lockUntil];
+    
+    return YES;
 }
 
 - (void)updateLockMessageOrUnlockIfNeeded
@@ -209,7 +226,7 @@ typedef enum : NSUInteger {
         return;
     }
     
-    BKPasscodeInputView *inputView = self.shiftingPasscodeInputView.passcodeInputView;
+    BKPasscodeInputView *inputView = self.passcodeInputView;
     
     NSDate *lockUntil = [self.delegate passcodeViewControllerLockUntilDate:self];
 
@@ -232,7 +249,40 @@ typedef enum : NSUInteger {
 {
     [self updateLockMessageOrUnlockIfNeeded];
 }
-                                     
+
+- (void)startTouchIDAuthenticationIfPossible
+{
+    if (nil == self.touchIDManager) {
+        return;
+    }
+    
+    if (self.type != BKPasscodeViewControllerCheckPasscodeType) {
+        return;
+    }
+    
+    if (self.promptingTouchID) {
+        return;
+    }
+    
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+        return;
+    }
+    
+    self.promptingTouchID = YES;
+    
+    [self.touchIDManager loadPasscodeWithCompletionBlock:^(NSString *passcode) {
+        
+        self.promptingTouchID = NO;
+        
+        if (passcode) {
+            
+            self.passcodeInputView.passcode = passcode;
+            
+            [self passcodeInputViewDidFinish:self.passcodeInputView];
+        }
+    }];
+}
+
 #pragma mark - Private methods
 
 - (void)updatePasscodeInputViewTitle:(BKPasscodeInputView *)passcodeInputView
@@ -274,6 +324,14 @@ typedef enum : NSUInteger {
     }
 }
 
+- (void)showTouchIDSwitchView
+{
+    BKTouchIDSwitchView *view = [[BKTouchIDSwitchView alloc] init];
+    view.delegate = self;
+    
+    [self.shiftingView showView:view withDirection:BKShiftingDirectionForward];
+}
+
 #pragma mark - BKPasscodeInputViewDelegate
 
 - (void)passcodeInputViewDidFinish:(BKPasscodeInputView *)aInputView
@@ -297,10 +355,14 @@ typedef enum : NSUInteger {
                         self.oldPasscode = passcode;
                         self.currentState = BKPasscodeViewControllerStateInputPassword;
                         
-                        [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionForward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
-                            [self customizePasscodeInputView:inputView];
-                            [self updatePasscodeInputViewTitle:inputView];
-                        }];
+                        self.passcodeInputView = [self.passcodeInputView copy];
+                        
+                        [self customizePasscodeInputView:self.passcodeInputView];
+                        [self updatePasscodeInputViewTitle:self.passcodeInputView];
+                        
+                        [self.shiftingView showView:self.passcodeInputView withDirection:BKShiftingDirectionForward];
+                        
+                        [self.passcodeInputView becomeFirstResponder];
                         
                     } else {
                         
@@ -351,39 +413,82 @@ typedef enum : NSUInteger {
                 
             } else {
                 
-                self.changedPasscode = passcode;
+                self.theNewPasscode = passcode;
                 self.currentState = BKPasscodeViewControllerStateReinputPassword;
                 
-                [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionForward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
-                    [self customizePasscodeInputView:inputView];
-                    [self updatePasscodeInputViewTitle:inputView];
-                }];
+                self.passcodeInputView = [self.passcodeInputView copy];
                 
+                [self customizePasscodeInputView:self.passcodeInputView];
+                [self updatePasscodeInputViewTitle:self.passcodeInputView];
+                
+                [self.shiftingView showView:self.passcodeInputView withDirection:BKShiftingDirectionForward];
+                
+                [self.passcodeInputView becomeFirstResponder];
             }
             
             break;
         }
         case BKPasscodeViewControllerStateReinputPassword:
         {
-            if ([passcode isEqualToString:self.changedPasscode]) {
+            if ([passcode isEqualToString:self.theNewPasscode]) {
                 
-                [self.delegate passcodeViewController:self didFinishWithPasscode:passcode];
+                if (self.touchIDManager && [BKTouchIDManager canUseTouchID]) {
+                    [self showTouchIDSwitchView];
+                } else {
+                    [self.delegate passcodeViewController:self didFinishWithPasscode:passcode];
+                }
                 
             } else {
                 
                 self.currentState = BKPasscodeViewControllerStateInputPassword;
                 
-                [self.shiftingPasscodeInputView shiftPasscodeInputViewWithDirection:BKShiftingDirectionBackward andConfigurationBlock:^(BKPasscodeInputView *inputView) {
-                    [self customizePasscodeInputView:inputView];
-                    [self updatePasscodeInputViewTitle:inputView];
-                    inputView.message = NSLocalizedStringFromTable(@"Passcodes did not match.\nTry again.", @"BKPasscodeView", @"암호가 일치하지 않습니다.\n다시 시도하십시오.");
-                }];
+                self.passcodeInputView = [self.passcodeInputView copy];
                 
+                [self customizePasscodeInputView:self.passcodeInputView];
+                [self updatePasscodeInputViewTitle:self.passcodeInputView];
+                
+                self.passcodeInputView.message = NSLocalizedStringFromTable(@"Passcodes did not match.\nTry again.", @"BKPasscodeView", @"암호가 일치하지 않습니다.\n다시 시도하십시오.");
+                
+                [self.shiftingView showView:self.passcodeInputView withDirection:BKShiftingDirectionBackward];
+                
+                [self.passcodeInputView becomeFirstResponder];
             }
             break;
         }
         default:
             break;
+    }
+}
+
+#pragma mark - BKTouchIDSwitchViewDelegate
+
+- (void)touchIDSwitchViewDidPressDoneButton:(BKTouchIDSwitchView *)view
+{
+    BOOL enabled = view.touchIDSwitch.isOn;
+    
+    if (enabled) {
+        
+        [self.touchIDManager savePasscode:self.theNewPasscode completionBlock:^(BOOL success) {
+            if (success) {
+                [self.delegate passcodeViewController:self didFinishWithPasscode:self.theNewPasscode];
+            } else {
+                if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidFailTouchIDKeychainOperation:)]) {
+                    [self.delegate passcodeViewControllerDidFailTouchIDKeychainOperation:self];
+                }
+            }
+        }];
+        
+    } else {
+        
+        [self.touchIDManager deletePasscodeWithCompletionBlock:^(BOOL success) {
+            if (success) {
+                [self.delegate passcodeViewController:self didFinishWithPasscode:self.theNewPasscode];
+            } else {
+                if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidFailTouchIDKeychainOperation:)]) {
+                    [self.delegate passcodeViewControllerDidFailTouchIDKeychainOperation:self];
+                }
+            }
+        }];
     }
 }
 
@@ -401,6 +506,11 @@ typedef enum : NSUInteger {
     }
     
     [self.view setNeedsLayout];
+}
+
+- (void)didReceiveApplicationWillEnterForegroundNotification:(NSNotification *)notification
+{
+    [self startTouchIDAuthenticationIfPossible];
 }
 
 @end

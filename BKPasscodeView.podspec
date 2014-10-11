@@ -93,6 +93,7 @@ Pod::Spec.new do |s|
 
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
+  s.resources = "BKPasscodeView/**/*.{xib}"
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
