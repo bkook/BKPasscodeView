@@ -9,11 +9,14 @@
 #import "BKTouchIDManager.h"
 #import <LocalAuthentication/LocalAuthentication.h>
 
+static NSString *const BKTouchIDManagerPasscodeAccountName = @"passcode";
+static NSString *const BKTouchIDManagerTouchIDEnabledAccountName = @"enabled";
+
 @interface BKTouchIDManager () {
     dispatch_queue_t _queue;
 }
 
-@property (nonatomic, strong) NSString          *keychainServiceName;
+@property (nonatomic, strong) NSString                  *keychainServiceName;
 
 @end
 
@@ -63,23 +66,20 @@
     
     dispatch_async(_queue, ^{
         
-        // try to update first
-        BOOL success = [[self class] updateKeychainItemWithServiceName:serviceName data:passcodeData];
+        BOOL success = [[self class] saveKeychainItemWithServiceName:serviceName
+                                                         accountName:BKTouchIDManagerPasscodeAccountName
+                                                                data:passcodeData
+                                                            sacFlags:kSecAccessControlUserPresence];
         
         if (success) {
-            if (completionBlock) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completionBlock(YES);
-                });
-            }
-            return;
+            
+            BOOL enabled = YES;
+            
+            success = [[self class] saveKeychainItemWithServiceName:serviceName
+                                                        accountName:BKTouchIDManagerTouchIDEnabledAccountName
+                                                               data:[NSData dataWithBytes:&enabled length:sizeof(BOOL)]
+                                                           sacFlags:0];
         }
-        
-        // try deleting when update failed (workaround for iOS 8 bug)
-        [[self class] deleteKeychainItemWithServiceName:serviceName];
-        
-        // try add
-        success = [[self class] addKeychainItemWithServiceName:serviceName data:passcodeData];
         
         if (completionBlock) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -100,6 +100,7 @@
     
     NSMutableDictionary *query = [NSMutableDictionary dictionaryWithDictionary:@{ (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
                                                                                   (__bridge id)kSecAttrService: self.keychainServiceName,
+                                                                                  (__bridge id)kSecAttrAccount: BKTouchIDManagerPasscodeAccountName,
                                                                                   (__bridge id)kSecReturnData: @YES }];
     
     if (self.promptText) {
@@ -132,7 +133,8 @@
 {
     dispatch_async(_queue, ^{
         
-        BOOL success = [[self class] deleteKeychainItemWithServiceName:self.keychainServiceName];
+        BOOL success = ([[self class] deleteKeychainItemWithServiceName:self.keychainServiceName accountName:BKTouchIDManagerPasscodeAccountName] &&
+                        [[self class] deleteKeychainItemWithServiceName:self.keychainServiceName accountName:BKTouchIDManagerTouchIDEnabledAccountName]);
         
         if (completionBlock) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -142,25 +144,62 @@
     });
 }
 
+- (BOOL)isTouchIDEnabled
+{
+    NSDictionary *query = @{ (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+                             (__bridge id)kSecAttrService: self.keychainServiceName,
+                             (__bridge id)kSecAttrAccount: BKTouchIDManagerTouchIDEnabledAccountName,
+                             (__bridge id)kSecReturnData: @YES };
+    
+    CFTypeRef dataTypeRef = NULL;
+    
+    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)(query), &dataTypeRef);
+    
+    if (status == errSecSuccess) {
+        
+        NSData *resultData = ( __bridge_transfer NSData *)dataTypeRef;
+        BOOL result;
+        [resultData getBytes:&result length:sizeof(BOOL)];
+        
+        return result;
+        
+    } else {
+        return NO;
+    }
+}
+
 #pragma mark - Static Methods
 
-+ (BOOL)addKeychainItemWithServiceName:(NSString *)serviceName data:(NSData *)data
++ (BOOL)saveKeychainItemWithServiceName:(NSString *)serviceName accountName:(NSString *)accountName data:(NSData *)data sacFlags:(SecAccessControlCreateFlags)sacFlags
+{
+    // try to update first
+    BOOL success = [self updateKeychainItemWithServiceName:serviceName accountName:accountName data:data];
+    
+    if (success) {
+        return YES;
+    }
+    
+    // try deleting when update failed (workaround for iOS 8 bug)
+    [self deleteKeychainItemWithServiceName:serviceName accountName:accountName];
+    
+    // try add
+    return [self addKeychainItemWithServiceName:serviceName accountName:accountName data:data sacFlags:sacFlags];
+}
+
++ (BOOL)addKeychainItemWithServiceName:(NSString *)serviceName accountName:(NSString *)accountName data:(NSData *)data sacFlags:(SecAccessControlCreateFlags)sacFlags
 {
     CFErrorRef error = NULL;
-    SecAccessControlRef sacObject;
-    
-    sacObject = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
-                                                kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-                                                kSecAccessControlUserPresence, &error);
+    SecAccessControlRef sacObject = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
+                                                                    kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
+                                                                    sacFlags, &error);
     
     if (sacObject == NULL || error != NULL) {
         return NO;
     }
     
-    // we want the operation to fail if there is an item which needs authentication so we will use
-    // kSecUseNoAuthenticationUI
     NSDictionary *attributes = @{ (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
                                   (__bridge id)kSecAttrService: serviceName,
+                                  (__bridge id)kSecAttrAccount: accountName,
                                   (__bridge id)kSecValueData: data,
                                   (__bridge id)kSecUseNoAuthenticationUI: @YES,
                                   (__bridge id)kSecAttrAccessControl: (__bridge_transfer id)sacObject };
@@ -170,10 +209,11 @@
     return (status == errSecSuccess);
 }
 
-+ (BOOL)updateKeychainItemWithServiceName:(NSString *)serviceName data:(NSData *)data
++ (BOOL)updateKeychainItemWithServiceName:(NSString *)serviceName accountName:(NSString *)accountName data:(NSData *)data
 {
     NSDictionary *query = @{ (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-                             (__bridge id)kSecAttrService: serviceName };
+                             (__bridge id)kSecAttrService: serviceName,
+                             (__bridge id)kSecAttrAccount: accountName };
     
     NSDictionary *changes = @{ (__bridge id)kSecValueData: data };
     
@@ -182,11 +222,11 @@
     return (status == errSecSuccess);
 }
 
-+ (BOOL)deleteKeychainItemWithServiceName:(NSString *)serviceName
++ (BOOL)deleteKeychainItemWithServiceName:(NSString *)serviceName accountName:(NSString *)accountName
 {
     NSDictionary *query = @{ (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-                             (__bridge id)kSecAttrService: serviceName
-                             };
+                             (__bridge id)kSecAttrService: serviceName,
+                             (__bridge id)kSecAttrAccount: accountName };
     
     OSStatus status = SecItemDelete((__bridge CFDictionaryRef)(query));
 

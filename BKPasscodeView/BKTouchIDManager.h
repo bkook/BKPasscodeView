@@ -10,9 +10,9 @@
 
 @interface BKTouchIDManager : NSObject
 
-@property (nonatomic, strong, readonly) NSString        *keychainServiceName;
-
-@property (nonatomic, strong) NSString                  *promptText;
+@property (nonatomic, strong, readonly) NSString                *keychainServiceName;
+@property (nonatomic, strong) NSString                          *promptText;
+@property (nonatomic, readonly, getter=isTouchIDEnabled) BOOL   touchIDEnabled;
 
 + (BOOL)canUseTouchID;
 
