@@ -328,6 +328,7 @@ typedef enum : NSUInteger {
 {
     BKTouchIDSwitchView *view = [[BKTouchIDSwitchView alloc] init];
     view.delegate = self;
+    view.touchIDSwitch.on = self.touchIDManager.isTouchIDEnabled;
     
     [self.shiftingView showView:view withDirection:BKShiftingDirectionForward];
 }
