@@ -15,6 +15,7 @@
 		DF23B10319E8567C00162483 /* BKShiftingView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF23B10219E8567C00162483 /* BKShiftingView.m */; };
 		DF23B10619E85EB400162483 /* BKTouchIDSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF23B10519E85EB400162483 /* BKTouchIDSwitchView.m */; };
 		DF346E4F190BF66600E850F9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF346E4E190BF66600E850F9 /* MainViewController.m */; };
+		DF7AFC3A19F3CD6500FEB0F9 /* BKPasscodeView.strings in Resources */ = {isa = PBXBuildFile; fileRef = DF7AFC3819F3CD6500FEB0F9 /* BKPasscodeView.strings */; };
 		DFB107B51903ECF70038FB05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B41903ECF70038FB05 /* Foundation.framework */; };
 		DFB107B71903ECF70038FB05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B61903ECF70038FB05 /* CoreGraphics.framework */; };
 		DFB107B91903ECF70038FB05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB107B81903ECF70038FB05 /* UIKit.framework */; };
@@ -60,6 +61,8 @@
 		DF346E4D190BF66600E850F9 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		DF346E4E190BF66600E850F9 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		DF72273F19DEF75E00994725 /* BKPasscodeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeUtils.h; sourceTree = "<group>"; };
+		DF7AFC3919F3CD6500FEB0F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BKPasscodeView.strings; sourceTree = "<group>"; };
+		DF7AFC3B19F3CD6A00FEB0F9 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/BKPasscodeView.strings; sourceTree = "<group>"; };
 		DF831312190D0C7B00148DB2 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DFB107B11903ECF70038FB05 /* BKPasscodeViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BKPasscodeViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFB107B41903ECF70038FB05 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -185,6 +188,7 @@
 		DFB107BB1903ECF70038FB05 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DF7AFC3819F3CD6500FEB0F9 /* BKPasscodeView.strings */,
 				DFB107BC1903ECF70038FB05 /* BKPasscodeViewDemo-Info.plist */,
 				DFB107BD1903ECF70038FB05 /* InfoPlist.strings */,
 				DFB107C01903ECF70038FB05 /* main.m */,
@@ -292,6 +296,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF7AFC3A19F3CD6500FEB0F9 /* BKPasscodeView.strings in Resources */,
 				DFB107BF1903ECF70038FB05 /* InfoPlist.strings in Resources */,
 				DFB107C71903ECF70038FB05 /* Images.xcassets in Resources */,
 			);
@@ -379,6 +384,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		DF7AFC3819F3CD6500FEB0F9 /* BKPasscodeView.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DF7AFC3919F3CD6500FEB0F9 /* en */,
+				DF7AFC3B19F3CD6A00FEB0F9 /* ko */,
+			);
+			name = BKPasscodeView.strings;
+			sourceTree = "<group>";
+		};
 		DFB107BD1903ECF70038FB05 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
