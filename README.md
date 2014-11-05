@@ -27,6 +27,11 @@ BKPasscodeView
 | ```BKPasscodeLockScreenManager``` | A manager that shows lock screen when application entered background state. You can activate with ```activateWithDelegate:``` method. |
 | ```BKTouchIDManager``` | A manager that save, load and delete keychain item. It saves passcode to keychain and item cannot be accessed without fingerprint. |
 
+## Podfile
+```ruby
+platform :ios
+pod 'BKPasscodeView', '~> 0.1.2'
+```
 
 ## Example
 
