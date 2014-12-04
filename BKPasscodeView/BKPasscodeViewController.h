@@ -24,10 +24,11 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, assign) id<BKPasscodeViewControllerDelegate> delegate;
 
-@property (nonatomic) BKPasscodeViewControllerType      type;
-@property (nonatomic) BKPasscodeInputViewPasscodeStyle  passcodeStyle;
-@property (nonatomic) UIKeyboardType                    keyboardType;
-@property (nonatomic, strong) BKTouchIDManager          *touchIDManager;
+@property (nonatomic) BKPasscodeViewControllerType              type;
+@property (nonatomic) BKPasscodeInputViewPasscodeStyle          passcodeStyle;
+@property (nonatomic) UIKeyboardType                            keyboardType;
+@property (nonatomic, strong, readonly) BKPasscodeInputView     *passcodeInputView;
+@property (nonatomic, strong) BKTouchIDManager                  *touchIDManager;
 
 /**
  * Customize passcode input view
