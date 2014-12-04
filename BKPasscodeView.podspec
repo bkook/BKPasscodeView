@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BKPasscodeView"
-  s.version      = "0.1.2"
+  s.version      = "0.1.3"
   s.summary      = "Customizable passcode view controller for iOS."
   s.description  = "It supports for setting, changing and authenticating a passcode. Simple numeric passcode or normal passcode can be used."
   s.homepage     = "https://github.com/bkook/BKPasscodeView"
