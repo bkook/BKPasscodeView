@@ -80,7 +80,7 @@ viewController.touchIDManager.promptText = @"Scan fingerprint to authenticate"; 
 
 ```
 
-### Show Lock Screen
+### Showing Lock Screen
 ```objc
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
