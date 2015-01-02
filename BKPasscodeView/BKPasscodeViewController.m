@@ -44,7 +44,8 @@ typedef enum : NSUInteger {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // init state
-        _currentState = BKPasscodeViewControllerStateUnknown;
+        _type = BKPasscodeViewControllerNewPasscodeType;
+        _currentState = BKPasscodeViewControllerStateInputPassword;
         
         // create shifting view
         self.shiftingView = [[BKShiftingView alloc] init];
@@ -72,8 +73,30 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)setType:(BKPasscodeViewControllerType)type
+{
+    if (_type == type) {
+        return;
+    }
+    
+    _type = type;
+    
+    switch (type) {
+        case BKPasscodeViewControllerNewPasscodeType:
+            self.currentState = BKPasscodeViewControllerStateInputPassword;
+            break;
+        default:
+            self.currentState = BKPasscodeViewControllerStateCheckPassword;
+            break;
+    }
+}
+
 - (BKPasscodeInputView *)passcodeInputView
 {
+    if (NO == [self.shiftingView.currentView isKindOfClass:[BKPasscodeInputView class]]) {
+        return nil;
+    }
+    
     return (BKPasscodeInputView *)self.shiftingView.currentView;
 }
 
@@ -90,24 +113,13 @@ typedef enum : NSUInteger {
 {
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     [self.view setBackgroundColor:[UIColor colorWithRed:0.94 green:0.94 blue:0.96 alpha:1]];
-    
-    if (self.currentState == BKPasscodeViewControllerStateUnknown) {
-        
-        switch (self.type) {
-            case BKPasscodeViewControllerNewPasscodeType:
-                self.currentState = BKPasscodeViewControllerStateInputPassword;
-                break;
-            default:
-                self.currentState = BKPasscodeViewControllerStateCheckPassword;
-                break;
-        }
-    }
-    
+   
     [self updatePasscodeInputViewTitle:self.passcodeInputView];
     
     [self customizePasscodeInputView:self.passcodeInputView];
@@ -263,19 +275,15 @@ typedef enum : NSUInteger {
 
 - (void)startTouchIDAuthenticationIfPossible
 {
-    if (nil == self.touchIDManager) {
-        return;
-    }
-    
-    if (self.type != BKPasscodeViewControllerCheckPasscodeType) {
-        return;
-    }
-    
-    if (self.promptingTouchID) {
-        return;
-    }
-    
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+    [self startTouchIDAuthenticationIfPossible:nil];
+}
+
+- (void)startTouchIDAuthenticationIfPossible:(void (^)(BOOL))aCompletionBlock
+{
+    if (NO == [self canAuthenticateWithTouchID]) {
+        if (aCompletionBlock) {
+            aCompletionBlock(NO);
+        }
         return;
     }
     
@@ -290,6 +298,10 @@ typedef enum : NSUInteger {
             self.passcodeInputView.passcode = passcode;
             
             [self passcodeInputViewDidFinish:self.passcodeInputView];
+        }
+            
+        if (aCompletionBlock) {
+            aCompletionBlock(YES);
         }
     }];
 }
@@ -342,6 +354,31 @@ typedef enum : NSUInteger {
     view.touchIDSwitch.on = self.touchIDManager.isTouchIDEnabled;
     
     [self.shiftingView showView:view withDirection:BKShiftingDirectionForward];
+}
+
+- (BOOL)canAuthenticateWithTouchID
+{
+    if (self.type != BKPasscodeViewControllerCheckPasscodeType) {
+        return NO;
+    }
+    
+    if (nil == self.touchIDManager) {
+        return NO;
+    }
+    
+    if (NO == self.touchIDManager.isTouchIDEnabled) {
+        return NO;
+    }
+    
+    if (self.promptingTouchID) {
+        return NO;
+    }
+    
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 #pragma mark - BKPasscodeInputViewDelegate

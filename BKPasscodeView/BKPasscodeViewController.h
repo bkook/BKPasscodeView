@@ -46,6 +46,12 @@ typedef enum : NSUInteger {
  */
 - (void)startTouchIDAuthenticationIfPossible;
 
+/**
+ * Prompts Touch ID view to scan fingerprint.
+ * If Touch ID is disabled or unavailable, value of 'prompted' will be NO.
+ */
+- (void)startTouchIDAuthenticationIfPossible:(void(^)(BOOL prompted))aCompletionBlock;
+
 @end
 
 @protocol BKPasscodeViewControllerDelegate <NSObject>

@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UISwitch          *simplePasscodeSwitch;
 @property (strong, nonatomic) UISwitch          *customizeAppearanceSwitch;
 @property (strong, nonatomic) UISwitch          *lockWhenEnterBackgroundSwitch;
+@property (strong, nonatomic) UISwitch          *authWithTouchIDFirstSwitch;
 
 @property (strong, nonatomic) NSString          *passcode;
 @property (nonatomic) NSUInteger                failedAttempts;
