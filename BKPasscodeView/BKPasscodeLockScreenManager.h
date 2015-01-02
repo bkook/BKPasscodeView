@@ -15,7 +15,7 @@
 
 @interface BKPasscodeLockScreenManager : NSObject <BKPasscodeDummyViewControllerDelegate>
 
-@property (assign, nonatomic) id<BKPasscodeLockScreenManagerDelegate> delegate;
+@property (weak, nonatomic) id<BKPasscodeLockScreenManagerDelegate> delegate;
 
 /**
  * Shared(singleton) instance.

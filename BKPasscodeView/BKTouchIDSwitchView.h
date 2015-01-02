@@ -13,7 +13,7 @@
 
 @interface BKTouchIDSwitchView : UIView
 
-@property (nonatomic, assign) id<BKTouchIDSwitchViewDelegate> delegate;
+@property (nonatomic, weak) id<BKTouchIDSwitchViewDelegate> delegate;
 
 @property (nonatomic, strong) UIView        *switchBackgroundView;
 @property (nonatomic, strong) UILabel       *messageLabel;

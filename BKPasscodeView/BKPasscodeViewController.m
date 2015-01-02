@@ -19,11 +19,12 @@ typedef enum : NSUInteger {
 } BKPasscodeViewControllerState;
 
 #define kBKPasscodeOneMinuteInSeconds           (60)
+#define kBKPasscodeDefaultKeyboardHeight        (216)
 
 @interface BKPasscodeViewController ()
 
-@property (nonatomic, strong) BKShiftingView                *shiftingView;
-@property (nonatomic, strong) BKPasscodeInputView           *passcodeInputView;
+@property (nonatomic, strong) BKShiftingView                        *shiftingView;
+@property (nonatomic, strong, readonly) BKPasscodeInputView         *passcodeInputView;
 
 @property (nonatomic) BKPasscodeViewControllerState         currentState;
 @property (nonatomic, strong) NSString                      *oldPasscode;
@@ -48,11 +49,7 @@ typedef enum : NSUInteger {
         // create shifting view
         self.shiftingView = [[BKShiftingView alloc] init];
         self.shiftingView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        
-        self.passcodeInputView = [[BKPasscodeInputView alloc] init];
-        self.passcodeInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.passcodeInputView.delegate = self;
-        self.shiftingView.currentView = self.passcodeInputView;
+        self.shiftingView.currentView = [self instantiatePasscodeInputView];
         
         // keyboard notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveKeyboardWillShowHideNotification:) name:UIKeyboardWillShowNotification object:nil];
@@ -62,7 +59,7 @@ typedef enum : NSUInteger {
                                                      name:UIApplicationWillEnterForegroundNotification
                                                    object:nil];
         
-        self.keyboardHeight = 216;      // sometimes keyboard notification is not posted at all. so setting default value.
+        self.keyboardHeight = kBKPasscodeDefaultKeyboardHeight;      // sometimes keyboard notification is not posted at all. so setting default value.
     }
     return self;
 }
@@ -73,6 +70,20 @@ typedef enum : NSUInteger {
     self.lockStateUpdateTimer = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (BKPasscodeInputView *)passcodeInputView
+{
+    return (BKPasscodeInputView *)self.shiftingView.currentView;
+}
+
+- (BKPasscodeInputView *)instantiatePasscodeInputView
+{
+    BKPasscodeInputView *view = [[BKPasscodeInputView alloc] init];
+    view.delegate = self;
+    view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    return view;
 }
 
 - (void)customizePasscodeInputView:(BKPasscodeInputView *)aPasscodeInputView
@@ -356,12 +367,12 @@ typedef enum : NSUInteger {
                         self.oldPasscode = passcode;
                         self.currentState = BKPasscodeViewControllerStateInputPassword;
                         
-                        self.passcodeInputView = [self.passcodeInputView copy];
+                        BKPasscodeInputView *newPasscodeInputView = [self.passcodeInputView copy];
                         
-                        [self customizePasscodeInputView:self.passcodeInputView];
-                        [self updatePasscodeInputViewTitle:self.passcodeInputView];
+                        [self customizePasscodeInputView:newPasscodeInputView];
                         
-                        [self.shiftingView showView:self.passcodeInputView withDirection:BKShiftingDirectionForward];
+                        [self updatePasscodeInputViewTitle:newPasscodeInputView];
+                        [self.shiftingView showView:newPasscodeInputView withDirection:BKShiftingDirectionForward];
                         
                         [self.passcodeInputView becomeFirstResponder];
                         
@@ -417,12 +428,12 @@ typedef enum : NSUInteger {
                 self.theNewPasscode = passcode;
                 self.currentState = BKPasscodeViewControllerStateReinputPassword;
                 
-                self.passcodeInputView = [self.passcodeInputView copy];
+                BKPasscodeInputView *newPasscodeInputView = [self.passcodeInputView copy];
                 
-                [self customizePasscodeInputView:self.passcodeInputView];
-                [self updatePasscodeInputViewTitle:self.passcodeInputView];
+                [self customizePasscodeInputView:newPasscodeInputView];
                 
-                [self.shiftingView showView:self.passcodeInputView withDirection:BKShiftingDirectionForward];
+                [self updatePasscodeInputViewTitle:newPasscodeInputView];
+                [self.shiftingView showView:newPasscodeInputView withDirection:BKShiftingDirectionForward];
                 
                 [self.passcodeInputView becomeFirstResponder];
             }
@@ -443,14 +454,15 @@ typedef enum : NSUInteger {
                 
                 self.currentState = BKPasscodeViewControllerStateInputPassword;
                 
-                self.passcodeInputView = [self.passcodeInputView copy];
+                BKPasscodeInputView *newPasscodeInputView = [self.passcodeInputView copy];
                 
-                [self customizePasscodeInputView:self.passcodeInputView];
-                [self updatePasscodeInputViewTitle:self.passcodeInputView];
+                [self customizePasscodeInputView:newPasscodeInputView];
                 
-                self.passcodeInputView.message = NSLocalizedStringFromTable(@"Passcodes did not match.\nTry again.", @"BKPasscodeView", @"암호가 일치하지 않습니다.\n다시 시도하십시오.");
+                [self updatePasscodeInputViewTitle:newPasscodeInputView];
                 
-                [self.shiftingView showView:self.passcodeInputView withDirection:BKShiftingDirectionBackward];
+                newPasscodeInputView.message = NSLocalizedStringFromTable(@"Passcodes did not match.\nTry again.", @"BKPasscodeView", @"암호가 일치하지 않습니다.\n다시 시도하십시오.");
+                
+                [self.shiftingView showView:newPasscodeInputView withDirection:BKShiftingDirectionBackward];
                 
                 [self.passcodeInputView becomeFirstResponder];
             }
