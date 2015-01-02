@@ -357,15 +357,15 @@ typedef enum : NSUInteger {
 
 - (BOOL)canAuthenticateWithTouchID
 {
+    if (NO == [BKTouchIDManager canUseTouchID]) {
+        return NO;
+    }
+    
     if (self.type != BKPasscodeViewControllerCheckPasscodeType) {
         return NO;
     }
-    
-    if (nil == self.touchIDManager) {
-        return NO;
-    }
-    
-    if (NO == self.touchIDManager.isTouchIDEnabled) {
+   
+    if (nil == self.touchIDManager || NO == self.touchIDManager.isTouchIDEnabled) {
         return NO;
     }
     
