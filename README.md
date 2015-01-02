@@ -56,6 +56,30 @@ UINavigationController *navController = [[UINavigationController alloc] initWith
 
 ```
 
+### Authenticate with Touch ID without presenting passcode view controller
+```objc
+BKPasscodeViewController *viewController = [[BKPasscodeViewController alloc] initWithNibName:nil bundle:nil];
+viewController.delegate = self;
+viewController.type = BKPasscodeViewControllerCheckPasscodeType;   // for authentication
+viewController.passcodeStyle = BKPasscodeInputViewNumericPasscodeStyle;
+
+// To supports Touch ID feature, set BKTouchIDManager instance to view controller.
+// It only supports iOS 8 or greater.
+viewController.touchIDManager = [[BKTouchIDManager alloc] initWithKeychainServiceName:@"<# your keychain service name #>"];
+viewController.touchIDManager.promptText = @"Scan fingerprint to authenticate";   // You can set prompt text.
+
+// Show Touch ID user interface
+[viewController startTouchIDAuthenticationIfPossible:^(BOOL prompted) {
+
+  // If Touch ID is unavailable or disabled, present passcode view controller for manual input.
+  if (NO == prompted) {
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navController animated:YES completion:nil];
+  }
+}];
+
+```
+
 ### Show Lock Screen
 ```objc
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
