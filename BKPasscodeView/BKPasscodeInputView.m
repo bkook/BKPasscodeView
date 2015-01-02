@@ -345,7 +345,7 @@
 
 - (BOOL)canResignFirstResponder
 {
-    return self.canDismissKeyboard;
+    return [self.passcodeField canResignFirstResponder];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -417,13 +417,12 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    BKPasscodeInputView *view = [[BKPasscodeInputView alloc] initWithFrame:self.frame];
+    BKPasscodeInputView *view = [[[self class] alloc] initWithFrame:self.bounds];
     view.delegate = self.delegate;
     view.autoresizingMask = self.autoresizingMask;
     view.passcodeStyle = self.passcodeStyle;
     view.keyboardType = self.keyboardType;
     view.maximumLength = self.maximumLength;
-    view.canDismissKeyboard = self.canDismissKeyboard;
     
     return view;
 }

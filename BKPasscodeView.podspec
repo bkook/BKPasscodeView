@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BKPasscodeView"
-  s.version      = "0.1.3"
+  s.version      = "0.2.0"
   s.summary      = "Customizable passcode view controller for iOS."
   s.description  = "It supports for setting, changing and authenticating a passcode. Simple numeric passcode or normal passcode can be used."
   s.homepage     = "https://github.com/bkook/BKPasscodeView"
@@ -52,8 +52,7 @@ Pod::Spec.new do |s|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  s.platform     = :ios
-  # s.platform     = :ios, "5.0"
+  s.platform     = :ios, "5.0"
 
   #  When using multiple platforms
   # s.ios.deployment_target = "5.0"

@@ -11,11 +11,11 @@
 @protocol BKPasscodeFieldDelegate;
 @protocol BKPasscodeFieldImageSource;
 
-@interface BKPasscodeField : UIControl <UIKeyInput, UIInputViewAudioFeedback>
+@interface BKPasscodeField : UIControl <UIKeyInput>
 
 // delegate
-@property (nonatomic, assign) id<BKPasscodeFieldDelegate> delegate;
-@property (nonatomic, assign) id<BKPasscodeFieldImageSource> imageSource;
+@property (nonatomic, weak) id<BKPasscodeFieldDelegate> delegate;
+@property (nonatomic, weak) id<BKPasscodeFieldImageSource> imageSource;
 
 // passcode
 @property (nonatomic, strong) NSString      *passcode;

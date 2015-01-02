@@ -12,6 +12,7 @@
 		DF1327941927DA4900B5D8CB /* BKPasscodeInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF13278E1927DA4900B5D8CB /* BKPasscodeInputView.m */; };
 		DF1327951927DA4900B5D8CB /* BKPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1327901927DA4900B5D8CB /* BKPasscodeViewController.m */; };
 		DF17CD8119E99C28001FA035 /* BKTouchIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DF17CD8019E99C28001FA035 /* BKTouchIDManager.m */; };
+		DF1F5D801A1B878C00B13631 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF1F5D7F1A1B878C00B13631 /* LocalAuthentication.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		DF23B10319E8567C00162483 /* BKShiftingView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF23B10219E8567C00162483 /* BKShiftingView.m */; };
 		DF23B10619E85EB400162483 /* BKTouchIDSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF23B10519E85EB400162483 /* BKTouchIDSwitchView.m */; };
 		DF346E4F190BF66600E850F9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF346E4E190BF66600E850F9 /* MainViewController.m */; };
@@ -54,6 +55,7 @@
 		DF1327901927DA4900B5D8CB /* BKPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeViewController.m; sourceTree = "<group>"; };
 		DF17CD7F19E99C28001FA035 /* BKTouchIDManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKTouchIDManager.h; sourceTree = "<group>"; };
 		DF17CD8019E99C28001FA035 /* BKTouchIDManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKTouchIDManager.m; sourceTree = "<group>"; };
+		DF1F5D7F1A1B878C00B13631 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
 		DF23B10119E8567C00162483 /* BKShiftingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKShiftingView.h; sourceTree = "<group>"; };
 		DF23B10219E8567C00162483 /* BKShiftingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKShiftingView.m; sourceTree = "<group>"; };
 		DF23B10419E85EB400162483 /* BKTouchIDSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKTouchIDSwitchView.h; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF1F5D801A1B878C00B13631 /* LocalAuthentication.framework in Frameworks */,
 				DFB107B71903ECF70038FB05 /* CoreGraphics.framework in Frameworks */,
 				DFB107B91903ECF70038FB05 /* UIKit.framework in Frameworks */,
 				DFB107B51903ECF70038FB05 /* Foundation.framework in Frameworks */,
@@ -161,6 +164,7 @@
 		DFB107B31903ECF70038FB05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DF1F5D7F1A1B878C00B13631 /* LocalAuthentication.framework */,
 				DFB107B41903ECF70038FB05 /* Foundation.framework */,
 				DFB107B61903ECF70038FB05 /* CoreGraphics.framework */,
 				DFB107B81903ECF70038FB05 /* UIKit.framework */,
@@ -421,6 +425,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_MODULES_AUTOLINK = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -445,7 +450,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -459,6 +464,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_MODULES_AUTOLINK = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -477,7 +483,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

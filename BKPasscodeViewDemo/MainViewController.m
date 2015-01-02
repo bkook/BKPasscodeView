@@ -37,6 +37,9 @@
     _lockWhenEnterBackgroundSwitch = [[UISwitch alloc] init];
     [_lockWhenEnterBackgroundSwitch setOn:NO];
     
+    _authWithTouchIDFirstSwitch = [[UISwitch alloc] init];
+    [_authWithTouchIDFirstSwitch setOn:YES];
+    
     self.title = @"BKPasscodeViewDemo";
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"reuseIdentifier"];
@@ -52,7 +55,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 3) {
-        return 3;
+        return 4;
     } else {
         return 1;
     }
@@ -63,6 +66,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"reuseIdentifier" forIndexPath:indexPath];
     cell.accessoryView = nil;
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    
+    cell.textLabel.numberOfLines = 0;
     
     switch (indexPath.section) {
         case 0:
@@ -81,9 +86,12 @@
             } else if (indexPath.row == 1) {
                 cell.textLabel.text = @"Customize appearance";
                 cell.accessoryView = self.customizeAppearanceSwitch;
-            } else {
+            } else if (indexPath.row == 2) {
                 cell.textLabel.text = @"Lock when enter background";
                 cell.accessoryView = self.lockWhenEnterBackgroundSwitch;
+            } else {
+                cell.textLabel.text = @"Auth with Touch ID first if available";
+                cell.accessoryView = self.authWithTouchIDFirstSwitch;
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             break;
@@ -122,6 +130,7 @@
     BKPasscodeViewController *viewController = [self createPasscodeViewController];
     viewController.delegate = self;
     
+    // Configure type of passcode view controller
     switch (indexPath.section) {
         case 0:
             viewController.type = BKPasscodeViewControllerNewPasscodeType;
@@ -136,16 +145,41 @@
             break;
     }
 
+    // Passcode style (numeric or ASCII)
     viewController.passcodeStyle = (self.simplePasscodeSwitch.isOn) ? BKPasscodeInputViewNumericPasscodeStyle : BKPasscodeInputViewNormalPasscodeStyle;
-    
-    viewController.touchIDManager = [[BKTouchIDManager alloc] initWithKeychainServiceName:BKPasscodeKeychainServiceName];
-    viewController.touchIDManager.promptText = @"Scan fingerprint to authenticate";
+
+    // Setup Touch ID manager
+    BKTouchIDManager *touchIDManager = [[BKTouchIDManager alloc] initWithKeychainServiceName:BKPasscodeKeychainServiceName];
+    touchIDManager.promptText = @"BKPasscodeView Touch ID Demo";
+    viewController.touchIDManager = touchIDManager;
     
     viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(passcodeViewCloseButtonPressed:)];
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     
-    [self presentViewController:navController animated:YES completion:nil];
+    if (self.authWithTouchIDFirstSwitch.isOn && viewController.type == BKPasscodeViewControllerCheckPasscodeType) {
+        
+        // To prevent duplicated selection before showing Touch ID user interface.
+        tableView.userInteractionEnabled = NO;
+        
+        // Show Touch ID user interface
+        [viewController startTouchIDAuthenticationIfPossible:^(BOOL prompted) {
+            
+            // Enable user interaction
+            tableView.userInteractionEnabled = YES;
+            
+            // If Touch ID is unavailable or disabled, present passcode view controller for manual input.
+            if (prompted) {
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            } else {
+                [self presentViewController:navController animated:YES completion:nil];
+            }
+        }];
+        
+    } else {
+        
+        [self presentViewController:navController animated:YES completion:nil];
+    }
 }
 
 - (void)passcodeViewCloseButtonPressed:(id)sender

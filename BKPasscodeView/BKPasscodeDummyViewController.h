@@ -13,7 +13,7 @@
 
 @interface BKPasscodeDummyViewController : UIViewController
 
-@property (nonatomic, assign) id<BKPasscodeDummyViewControllerDelegate> delegate;
+@property (nonatomic, weak) id<BKPasscodeDummyViewControllerDelegate> delegate;
 
 @end
 

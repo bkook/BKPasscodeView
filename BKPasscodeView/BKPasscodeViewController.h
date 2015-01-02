@@ -22,7 +22,7 @@ typedef enum : NSUInteger {
 
 @interface BKPasscodeViewController : UIViewController <BKPasscodeInputViewDelegate, BKTouchIDSwitchViewDelegate>
 
-@property (nonatomic, assign) id<BKPasscodeViewControllerDelegate> delegate;
+@property (nonatomic, weak) id<BKPasscodeViewControllerDelegate> delegate;
 
 @property (nonatomic) BKPasscodeViewControllerType              type;
 @property (nonatomic) BKPasscodeInputViewPasscodeStyle          passcodeStyle;
@@ -37,9 +37,21 @@ typedef enum : NSUInteger {
 - (void)customizePasscodeInputView:(BKPasscodeInputView *)aPasscodeInputView;
 
 /**
+ * Instantiate passcode input view.
+ * You may override to use custom passcode input view.
+ */
+- (BKPasscodeInputView *)instantiatePasscodeInputView;
+
+/**
  * Prompts Touch ID view to scan fingerprint.
  */
 - (void)startTouchIDAuthenticationIfPossible;
+
+/**
+ * Prompts Touch ID view to scan fingerprint.
+ * If Touch ID is disabled or unavailable, value of 'prompted' will be NO.
+ */
+- (void)startTouchIDAuthenticationIfPossible:(void(^)(BOOL prompted))aCompletionBlock;
 
 @end
 

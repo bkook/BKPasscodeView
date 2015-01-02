@@ -52,9 +52,11 @@
     _lineHeight = 3.0f;
     _dotColor = [UIColor blackColor];
     
-    [self setBackgroundColor:[UIColor clearColor]];
+    self.backgroundColor = [UIColor clearColor];
     
     _mutablePasscode = [[NSMutableString alloc] initWithCapacity:4];
+    
+    [self addTarget:self action:@selector(didTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (NSRegularExpression *)nonDigitRegularExpression
@@ -120,8 +122,6 @@
 
     [self setNeedsDisplay];
     
-    [[UIDevice currentDevice] playInputClick];
-    
     [self sendActionsForControlEvents:UIControlEventEditingChanged];
 }
 
@@ -144,9 +144,7 @@
     [self.mutablePasscode deleteCharactersInRange:NSMakeRange(self.mutablePasscode.length - 1, 1)];
     
     [self setNeedsDisplay];
-    
-    [[UIDevice currentDevice] playInputClick];
-    
+   
     [self sendActionsForControlEvents:UIControlEventEditingChanged];
 }
 
@@ -258,23 +256,16 @@
 
 #pragma mark - UIResponder
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if (![self isFirstResponder]) {
-        [self becomeFirstResponder];
-    }
-}
-
 - (BOOL)canBecomeFirstResponder
 {
     return YES;
 }
 
-#pragma mark - UIInputViewAudioFeedback
+#pragma mark - Actions
 
-- (BOOL)enableInputClicksWhenVisible
+- (void)didTouchUpInside:(id)sender
 {
-    return YES;
+    [self becomeFirstResponder];
 }
 
 @end

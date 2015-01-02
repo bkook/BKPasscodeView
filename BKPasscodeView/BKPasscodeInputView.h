@@ -21,12 +21,11 @@ typedef enum : NSUInteger {
 
 @interface BKPasscodeInputView : UIView <UITextFieldDelegate, BKPasscodeFieldDelegate, NSCopying>
 
-@property (nonatomic, assign) id<BKPasscodeInputViewDelegate> delegate;
+@property (nonatomic, weak) id<BKPasscodeInputViewDelegate> delegate;
 
 @property (nonatomic) BKPasscodeInputViewPasscodeStyle  passcodeStyle;
 @property (nonatomic) UIKeyboardType                    keyboardType;
 @property (nonatomic) NSUInteger                        maximumLength;
-@property (nonatomic, assign) BOOL                      canDismissKeyboard;
 
 @property (nonatomic, strong) NSString                  *title;
 @property (nonatomic, strong) NSString                  *message;
