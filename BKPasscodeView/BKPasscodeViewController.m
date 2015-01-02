@@ -23,8 +23,7 @@ typedef enum : NSUInteger {
 
 @interface BKPasscodeViewController ()
 
-@property (nonatomic, strong) BKShiftingView                        *shiftingView;
-@property (nonatomic, strong, readonly) BKPasscodeInputView         *passcodeInputView;
+@property (nonatomic, strong) BKShiftingView                *shiftingView;
 
 @property (nonatomic) BKPasscodeViewControllerState         currentState;
 @property (nonatomic, strong) NSString                      *oldPasscode;
