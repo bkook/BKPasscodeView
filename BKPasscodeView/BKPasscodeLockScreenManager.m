@@ -47,6 +47,9 @@ static BKPasscodeLockScreenManager *_sharedManager;
     // get the main window
     self.mainWindow = [[UIApplication sharedApplication] keyWindow];
     
+    // dismiss keyboard before showing lock screen
+    [self.mainWindow.rootViewController.view endEditing:YES];
+    
     // add blind view
     UIView *blindView;
     
@@ -66,22 +69,27 @@ static BKPasscodeLockScreenManager *_sharedManager;
     
     self.blindView = blindView;
     
-    // resign key window
-    [self.mainWindow resignKeyWindow];
-    
     // set dummy view controller as root view controller
     BKPasscodeDummyViewController *dummyViewController = [[BKPasscodeDummyViewController alloc] init];
     
     UIWindow *lockScreenWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     lockScreenWindow.windowLevel = self.mainWindow.windowLevel + 1;
     lockScreenWindow.rootViewController = dummyViewController;
+    lockScreenWindow.backgroundColor = [UIColor clearColor];
     [lockScreenWindow makeKeyAndVisible];
-    
-    self.lockScreenWindow = lockScreenWindow;
-    
+   
     // present lock screen
     UIViewController *lockScreenViewController = [self.delegate lockScreenManagerPasscodeViewController:self];
-    [self.lockScreenWindow.rootViewController presentViewController:lockScreenViewController animated:animated completion:nil];
+    
+    if (animated) {
+        blindView.hidden = YES;
+    }
+    
+    [lockScreenWindow.rootViewController presentViewController:lockScreenViewController animated:animated completion:^{
+        blindView.hidden = NO;
+    }];
+    
+    self.lockScreenWindow = lockScreenWindow;
     
     [lockScreenViewController.view.superview bringSubviewToFront:lockScreenViewController.view];
     
@@ -97,9 +105,6 @@ static BKPasscodeLockScreenManager *_sharedManager;
 
 - (void)dummyViewControllerDidAppear:(BKPasscodeDummyViewController *)aViewController
 {
-    [self.lockScreenWindow resignKeyWindow];
-    self.lockScreenWindow.hidden = YES;
-    
     if ([UIView instancesRespondToSelector:@selector(tintColor)]) {
         self.lockScreenWindow = nil;
     } else {

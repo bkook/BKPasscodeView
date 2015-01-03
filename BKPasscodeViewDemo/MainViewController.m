@@ -146,6 +146,8 @@
                 break;
             case 3:
             {
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                
                 self.showingLockScreenManually = YES;
                 
                 [[BKPasscodeLockScreenManager sharedManager] showLockScreen:YES];
