@@ -21,4 +21,6 @@
 @property (nonatomic) NSUInteger                failedAttempts;
 @property (strong, nonatomic) NSDate            *lockUntilDate;
 
+@property (nonatomic) BOOL                      showingLockScreenManually;
+
 @end

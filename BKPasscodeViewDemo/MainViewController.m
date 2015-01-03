@@ -49,15 +49,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 3) {
+    if (section == 0) {
+        return 4;
+    } else if (section == 1) {
         return 4;
     } else {
-        return 1;
+        return 0;
     }
 }
 
@@ -71,15 +73,18 @@
     
     switch (indexPath.section) {
         case 0:
-            cell.textLabel.text = @"Set passcode";
+            if (indexPath.row == 0) {
+                cell.textLabel.text = @"Set passcode";
+            } else if (indexPath.row == 1) {
+                cell.textLabel.text = @"Change passcode";
+            } else if (indexPath.row == 2) {
+                cell.textLabel.text = @"Check passcode";
+            } else if (indexPath.row == 3) {
+                cell.textLabel.text = @"Show lock screen";
+            }
             break;
+            
         case 1:
-            cell.textLabel.text = @"Change passcode";
-            break;
-        case 2:
-            cell.textLabel.text = @"Check passcode";
-            break;
-        case 3:
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"Use simple passcode";
                 cell.accessoryView = self.simplePasscodeSwitch;
@@ -127,27 +132,43 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 0) {
+        
+        switch (indexPath.row) {
+            case 0:
+                [self presentPasscodeViewControllerWithType:BKPasscodeViewControllerNewPasscodeType];
+                break;
+            case 1:
+                [self presentPasscodeViewControllerWithType:BKPasscodeViewControllerChangePasscodeType];
+                break;
+            case 2:
+                [self presentPasscodeViewControllerWithType:BKPasscodeViewControllerCheckPasscodeType];
+                break;
+            case 3:
+            {
+                self.showingLockScreenManually = YES;
+                
+                [[BKPasscodeLockScreenManager sharedManager] showLockScreen:YES];
+                
+                self.showingLockScreenManually = NO;
+                
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
+- (void)presentPasscodeViewControllerWithType:(BKPasscodeViewControllerType)type
+{
     BKPasscodeViewController *viewController = [self createPasscodeViewController];
     viewController.delegate = self;
-    
-    // Configure type of passcode view controller
-    switch (indexPath.section) {
-        case 0:
-            viewController.type = BKPasscodeViewControllerNewPasscodeType;
-            break;
-        case 1:
-            viewController.type = BKPasscodeViewControllerChangePasscodeType;
-            break;
-        case 2:
-            viewController.type = BKPasscodeViewControllerCheckPasscodeType;
-            break;
-        default:
-            break;
-    }
+    viewController.type = type;
 
     // Passcode style (numeric or ASCII)
     viewController.passcodeStyle = (self.simplePasscodeSwitch.isOn) ? BKPasscodeInputViewNumericPasscodeStyle : BKPasscodeInputViewNormalPasscodeStyle;
-
+    
     // Setup Touch ID manager
     BKTouchIDManager *touchIDManager = [[BKTouchIDManager alloc] initWithKeychainServiceName:BKPasscodeKeychainServiceName];
     touchIDManager.promptText = @"BKPasscodeView Touch ID Demo";
@@ -160,17 +181,20 @@
     if (self.authWithTouchIDFirstSwitch.isOn && viewController.type == BKPasscodeViewControllerCheckPasscodeType) {
         
         // To prevent duplicated selection before showing Touch ID user interface.
-        tableView.userInteractionEnabled = NO;
+        self.tableView.userInteractionEnabled = NO;
         
         // Show Touch ID user interface
         [viewController startTouchIDAuthenticationIfPossible:^(BOOL prompted) {
             
             // Enable user interaction
-            tableView.userInteractionEnabled = YES;
+            self.tableView.userInteractionEnabled = YES;
             
             // If Touch ID is unavailable or disabled, present passcode view controller for manual input.
             if (prompted) {
-                [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
+                if (selectedIndexPath) {
+                    [self.tableView deselectRowAtIndexPath:selectedIndexPath animated:YES];
+                }
             } else {
                 [self presentViewController:navController animated:YES completion:nil];
             }

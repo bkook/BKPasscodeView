@@ -66,7 +66,7 @@ NSString *const BKPasscodeKeychainServiceName = @"BKPasscodeSampleService";
 
 - (BOOL)lockScreenManagerShouldShowLockScreen:(BKPasscodeLockScreenManager *)aManager
 {
-    return self.mainViewController.lockWhenEnterBackgroundSwitch.isOn;
+    return self.mainViewController.lockWhenEnterBackgroundSwitch.isOn || self.mainViewController.showingLockScreenManually;
 }
 
 - (UIViewController *)lockScreenManagerPasscodeViewController:(BKPasscodeLockScreenManager *)aManager
