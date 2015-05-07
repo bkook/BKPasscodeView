@@ -57,7 +57,7 @@ static BKPasscodeLockScreenManager *_sharedManager;
         blindView = [self.delegate lockScreenManagerBlindView:self];
     }
     
-    if (nil == self.blindView) {
+    if (nil == blindView) {
         blindView = [[UIView alloc] init];
         blindView.backgroundColor = [UIColor whiteColor];
     }
