@@ -88,6 +88,8 @@
 		DFD1DB68198D2809005BC7AB /* BKPasscodeLockScreenManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeLockScreenManager.m; sourceTree = "<group>"; };
 		DFD1DB6A198D4A14005BC7AB /* BKPasscodeDummyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPasscodeDummyViewController.h; sourceTree = "<group>"; };
 		DFD1DB6B198D4A14005BC7AB /* BKPasscodeDummyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPasscodeDummyViewController.m; sourceTree = "<group>"; };
+		E53B83A22CD25AFDAC67B7C3 /* Pods-BKPasscodeViewDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BKPasscodeViewDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BKPasscodeViewDemoTests/Pods-BKPasscodeViewDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FEB6D56C45F4D9EA212974D0 /* Pods-BKPasscodeViewDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BKPasscodeViewDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-BKPasscodeViewDemo/Pods-BKPasscodeViewDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,12 +112,24 @@
 				DFB107CE1903ECF70038FB05 /* XCTest.framework in Frameworks */,
 				DFB107D01903ECF70038FB05 /* UIKit.framework in Frameworks */,
 				DFB107CF1903ECF70038FB05 /* Foundation.framework in Frameworks */,
+				01A35F9F08F7D4DBD023F5B5 /* libPods-BKPasscodeViewDemoTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		70B81AF431AF4686C5CFE2D8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				206D77EC92CF8D1A381DCF6B /* Pods-BKPasscodeViewDemo.debug.xcconfig */,
+				FEB6D56C45F4D9EA212974D0 /* Pods-BKPasscodeViewDemo.release.xcconfig */,
+				E53B83A22CD25AFDAC67B7C3 /* Pods-BKPasscodeViewDemoTests.debug.xcconfig */,
+				2162122C6EC04B963BBBEB08 /* Pods-BKPasscodeViewDemoTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		DF13278A1927DA4900B5D8CB /* BKPasscodeView */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,9 +259,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DFB107E01903ECF70038FB05 /* Build configuration list for PBXNativeTarget "BKPasscodeViewDemoTests" */;
 			buildPhases = (
+				D570D811B5F22A3A3F8AB5C7 /* [CP] Check Pods Manifest.lock */,
 				DFB107C81903ECF70038FB05 /* Sources */,
 				DFB107C91903ECF70038FB05 /* Frameworks */,
 				DFB107CA1903ECF70038FB05 /* Resources */,
+				5DC932D8F556D0CADCAC342D /* [CP] Embed Pods Frameworks */,
+				7F84B313E380ED4A4A43405D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -283,6 +300,7 @@
 			knownRegions = (
 				en,
 				ko,
+				ja,
 			);
 			mainGroup = DFB107A81903ECF70038FB05;
 			productRefGroup = DFB107B21903ECF70038FB05 /* Products */;
@@ -393,6 +411,7 @@
 			children = (
 				DF7AFC3919F3CD6500FEB0F9 /* en */,
 				DF7AFC3B19F3CD6A00FEB0F9 /* ko */,
+				56354F6B1D2DFE150059D689 /* ja */,
 			);
 			name = BKPasscodeView.strings;
 			sourceTree = "<group>";
@@ -401,6 +420,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DFB107BE1903ECF70038FB05 /* en */,
+				56354F6C1D2DFE150059D689 /* ja */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -537,6 +557,7 @@
 		};
 		DFB107E11903ECF70038FB05 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E53B83A22CD25AFDAC67B7C3 /* Pods-BKPasscodeViewDemoTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/BKPasscodeViewDemo.app/BKPasscodeViewDemo";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -559,6 +580,7 @@
 		};
 		DFB107E21903ECF70038FB05 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2162122C6EC04B963BBBEB08 /* Pods-BKPasscodeViewDemoTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/BKPasscodeViewDemo.app/BKPasscodeViewDemo";
 				FRAMEWORK_SEARCH_PATHS = (
