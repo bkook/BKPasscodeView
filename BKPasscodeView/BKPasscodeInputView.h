@@ -35,6 +35,13 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, strong, readonly) UIControl       *passcodeField;
 
+@property (nonatomic, strong) UIFont                    *titleFont;
+@property (nonatomic, strong) UIColor                   *titleColor;
+@property (nonatomic, strong) UIFont                    *messageFont;
+@property (nonatomic, strong) UIColor                   *messageColor;
+@property (nonatomic, strong) UIFont                    *errorMessageFont;
+@property (nonatomic, strong) UIColor                   *errorMessageColor;
+
 // You can override these methods to customize message label appearance.
 + (void)configureTitleLabel:(UILabel *)aLabel;
 + (void)configureMessageLabel:(UILabel *)aLabel;

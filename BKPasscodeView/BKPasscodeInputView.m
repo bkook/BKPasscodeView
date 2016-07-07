@@ -272,6 +272,68 @@
     }
 }
 
+#pragma mark - Customizations
+
+- (UIFont *)titleFont
+{
+    return self.titleLabel.font;
+}
+
+- (void)setTitleFont:(UIFont *)font
+{
+    self.titleLabel.font = font;
+}
+
+- (UIFont *)messageFont
+{
+    return self.messageLabel.font;
+}
+
+- (void)setMessageFont:(UIFont *)font
+{
+    self.messageLabel.font = font;
+}
+
+- (UIFont *)errorMessageFont
+{
+    return self.errorMessageLabel.font;
+}
+
+- (void)setErrorMessageFont:(UIFont *)font
+{
+    self.errorMessageLabel.font = font;
+}
+
+- (UIColor *)titleColor
+{
+    return self.titleLabel.textColor;
+}
+
+- (void)setTitleColor:(UIColor *)color
+{
+    self.titleLabel.textColor = color;
+}
+
+- (UIColor *)messageColor
+{
+    return self.messageLabel.textColor;
+}
+
+- (void)setMessageColor:(UIColor *)color
+{
+    self.messageLabel.textColor = color;
+}
+
+- (UIColor *)errorMessageColor
+{
+    return self.errorMessageLabel.textColor;
+}
+
+- (void)setErrorMessageColor:(UIColor *)color
+{
+    self.errorMessageLabel.textColor = color;
+}
+
 #pragma mark - UIView
 
 - (CGFloat)labelPasscodeSpace
