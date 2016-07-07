@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.description  = "It supports for setting, changing and authenticating a passcode. Simple numeric passcode or normal passcode can be used."
   s.homepage     = "https://github.com/bkook/BKPasscodeView"
   s.screenshots  = "https://raw.githubusercontent.com/bkook/BKPasscodeView/master/Screenshots/passcode_01.png", "https://raw.githubusercontent.com/bkook/BKPasscodeView/master/Screenshots/passcode_02.png"
-
+  s.resource_bundle = { "MyResources" => ["BKPasscodeViewDemo/*"] }
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
